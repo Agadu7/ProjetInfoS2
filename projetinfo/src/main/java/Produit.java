@@ -1,3 +1,31 @@
 public class Produit {
+    private String codeProduit;
+    private String dProduit;
+
+    public Produit(String codeProduit, String dProduit) {
+        this.codeProduit = codeProduit;
+        this.dProduit=dProduit;
+    }
+
+    public String getCodeProduit() {
+        return codeProduit;
+    }
+    public void setCodeProduit(String codeProduit) {
+        this.codeProduit = codeProduit;
+    }
+    public String getdProduit() {
+        return dProduit;
+    }
+    public void setdProduit(String dProduit) {
+        this.dProduit = dProduit;
+    }
+
+    public void afficheProduit(){
+        System.out.println("Le code de ce produit est "+this.codeProduit+" il a pour désignagtion : "+this.dProduit);
+    }
+    public void modifierProduit(String code, String designation){
+        this.codeProduit=code;
+        this.dProduit=designation;
+    }
     
 }
