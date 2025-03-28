@@ -6,6 +6,15 @@ public class Machine {
     private String type;
     private float cout;
     
+    public Machine(String refMachine, String dMachine, float x, float y, String type, float cout) {
+        this.refMachine = refMachine;
+        this.x=x;
+        this.y=y;
+        this.dMachine =dMachine;
+        this.cout = cout;
+        this.type=type;
+    }
+
     public String getRefMachine() {
         return refMachine;
     }

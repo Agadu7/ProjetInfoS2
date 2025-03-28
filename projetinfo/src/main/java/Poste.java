@@ -4,6 +4,12 @@ public class Poste {
     private String refPoste;
     private String dPoste;
     private ArrayList<Machine> listeMachine;
+
+    public Poste(String refPoste, String dPoste, ArrayList<Machine> listeMachine) {
+        this.listeMachine = listeMachine;
+        this.dPoste=dPoste;
+        this.listeMachine=listeMachine;
+    }
     
     public String getRefPoste() {
         return refPoste;

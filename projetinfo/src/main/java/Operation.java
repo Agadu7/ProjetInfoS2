@@ -3,6 +3,13 @@ public class Operation {
     private String dOperation;
     private String refEquipement;
     private float dureeOperation;
+
+    public Operation(String refOperation, String dOperation, String refEquipement, float dureeOperation) {
+        this.refOperation = refOperation;
+        this.dOperation=dOperation;
+        this.refEquipement=refEquipement;
+        this.dureeOperation =dureeOperation;
+    }
     
     public String getRefOperation() {
         return refOperation;
