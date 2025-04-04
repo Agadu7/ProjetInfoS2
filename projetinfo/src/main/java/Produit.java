@@ -19,13 +19,5 @@ public class Produit {
     public void setdProduit(String dProduit) {
         this.dProduit = dProduit;
     }
-
-    public void afficheProduit(){
-        System.out.println("Le code de ce produit est "+this.codeProduit+" il a pour désignagtion : "+this.dProduit);
-    }
-    public void modifierProduit(String code, String designation){
-        this.codeProduit=code;
-        this.dProduit=designation;
-    }
     
 }
