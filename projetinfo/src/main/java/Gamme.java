@@ -54,28 +54,19 @@ public class Gamme {
             System.out.println("Machine "+i+" : "+this.listeProduit.get(i));
           }
     } 
-    public void modifierProduit(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("Quel produit souhaitez vous modifier ?");
-        String str = sc.nextLine();
-        System.out.println("Comment souhaitez vous le renommer ?");
-        String str1 = sc.nextLine();
-        if(listeProduit.contains(str) == true){
-            int index = str.
-            listeProduit.replace(str,str1);
-        }
-        else{
-            System.out.println("Ce produit n'existe pas");
-        }
-    } 
+     
     public void supprimerProduit(){
+        System.out.println("Quelle est le code du produit que vous souhaitez supprimer?");
         Scanner sc = new Scanner(System.in);
         String str = sc.nextLine();
-        if(listeProduit.contains(str) == true){
-            listeProduit.remove(str);
-        }
-        else{
-            System.out.println("Ce produit n'existe pas");
+        listeProduit.remove(listeProduit.getCodeProduit()==str);
+        for (Produit listeProduit : listeProduit) {
+            if (listeProduit.getCodeProduit().equals(str)) {
+                listeProduit.remove(str);
+            }
+            else{
+                System.out.println("Ce produit n'existe pas");
+            }
         }
     } 
 }
