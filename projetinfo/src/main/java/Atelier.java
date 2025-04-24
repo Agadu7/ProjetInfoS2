@@ -130,5 +130,86 @@ public class Atelier {
             
         }
     }
+
+    public void afficheMachine(){
+        for (int i = 0; i < this.listeMachine.size(); i++) {
+            System.out.println("Machine "+i+" : "+this.listeMachine.get(i));
+          }
+    } 
+     
+    public void supprimerMachine(){
+        System.out.println("Quelle est le poste que vous souhaitez supprimer?");
+        Scanner sc = new Scanner(System.in);
+        String str1 = sc.nextLine();
+        Machine machineASupprimer = new Machine(str1, null,0,0,null,0);
+        for (int i = 0; i < listeMachine.size(); i++) {
+            if (listeMachine.get(i).getRefMachine().equals(machineASupprimer.getRefMachine())) {
+                listeMachine.remove(i);
+            }
+            else{
+                System.out.println("Le poste n'existe pas");
+            }
+        }
+    } 
+
+    public void modifierMachine(){
+        System.out.println("Quelle est la machine que vous souhaitez modifier?");
+        Scanner sc = new Scanner(System.in);
+        String str1 = sc.nextLine();
+        System.out.println("Souhaitez vous modifier la description ? (Y/N)");
+        String d = sc.nextLine();
+        System.out.println("Souhaitez vous modifier la ref du poste ? (Y/N)");
+        String c = sc.nextLine();
+        System.out.println("Souhaitez vous modifier la coordonnée x de la machine ? (Y/N)");
+        String x = sc.nextLine();
+        System.out.println("Souhaitez vous modifier la coordonnée y de la machine ? (Y/N)");
+        String y = sc.nextLine();
+        System.out.println("Souhaitez vous modifier le type de machine (Y/N)");
+        String t = sc.nextLine();
+        System.out.println("Souhaitez vous modifier le cout du fonctionnement de la machine ? (Y/N)");
+        String cout = sc.nextLine();
+        Machine machineAModifer = new Machine(str1, null,0,0,null,0);
+        for (int i = 0; i < listeMachine.size(); i++) {
+            if (listeMachine.get(i).getRefMachine().equals(machineAModifer.getRefMachine())) {
+                if(d.equalsIgnoreCase("Y")){
+                    System.out.println("Quelle est la nouvelle description ?");
+                    String d1 = sc.nextLine();
+                    listeMachine.get(i).setdMachine(d1);
+                }
+                if(c.equalsIgnoreCase("Y")){
+                    System.out.println("Quel est le nouveau code de cette machine ?");
+                    String c1 = sc.nextLine();
+                    listeMachine.get(i).setRefMachine(c1);
+                }
+                if(x.equalsIgnoreCase("Y")){
+                    System.out.print("Quelle est la nouvelle coordonnée x de cette machine ?");
+                    float x1 = sc.nextInt();
+                    sc.nextLine();
+                    listeMachine.get(i).setX(x1);
+                }
+                if(y.equalsIgnoreCase("Y")){
+                    System.out.print("Quelle est la nouvelle coordonnée y de cette machine ?");
+                    float y1 = sc.nextInt();
+                    sc.nextLine();
+                    listeMachine.get(i).setY(y1);
+                }
+                if(t.equalsIgnoreCase("Y")){
+                    System.out.print("Quel est le nouveau type de cette machine ?");
+                    String type = sc.nextLine();
+                    listeMachine.get(i).setType(type);
+                }
+                if(cout.equalsIgnoreCase("Y")){
+                    System.out.print("Quel est le nouveau coût de cette machine ? ");
+                    float c1 = sc.nextInt();
+                    sc.nextLine();
+                    listeMachine.get(i).setCout(c1);
+                }
+            }
+            else{
+                System.out.println("Ce poste n'existe pas");
+            }
+            
+        }
+    }
     
 }

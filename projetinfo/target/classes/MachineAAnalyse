@@ -1,0 +1,47 @@
+import java.io.*;
+import java.util.*;
+
+public class MachineAAnalyse {
+    private String[] M; // Tableau des machines
+    private int e; // Nombre de machines enregistrées
+
+    public GestionMachines(int tailleMax) {
+        this.M = new String[tailleMax]; // Taille maximale du tableau
+        this.e = 0; // Initialisation du compteur
+    }
+
+    public void chargerMachines(String cheminFichier) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(cheminFichier));
+        String ligneLue;
+        boolean ajouter;
+
+        while ((ligneLue = in.readLine()) != null) {
+            StringTokenizer t = new StringTokenizer(ligneLue, " ");
+            String machine = t.nextToken();
+            ajouter = true;
+
+            // Vérification de l’existence de la machine dans le tableau
+            for (int i = 0; i < e; i++) {
+                if (machine.equals(M[i])) {
+                    ajouter = false; // Machine déjà enregistrée
+                    break;
+                }
+            }
+
+            // Enregistrement de la nouvelle machine si elle n'existe pas déjà
+            if (ajouter && e < M.length) {
+                M[e] = machine;
+                e++;
+            }
+        }
+
+        in.close();
+    }
+
+    public void afficherMachines() {
+        System.out.println("Machines enregistrées :");
+        for (int i = 0; i < e; i++) {
+            System.out.println("- " + M[i]);
+        }
+    }
+}
