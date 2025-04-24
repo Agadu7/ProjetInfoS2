@@ -51,7 +51,7 @@ public class Gamme {
 
     public void afficheProduit(){
         for (int i = 0; i < this.listeProduit.size(); i++) {
-            System.out.println("Machine "+i+" : "+this.listeProduit.get(i));
+            System.out.println("Produit "+i+" : "+this.listeProduit.get(i));
           }
     } 
      
