@@ -57,45 +57,47 @@ public class Gamme {
      
     public void supprimerProduit(){
         System.out.println("Quelle est le code du produit que vous souhaitez supprimer?");
-        Scanner sc = new Scanner(System.in);
-        String str1 = sc.nextLine();
-        Produit produitASupprimer = new Produit(str1, null);
-        for (int i = 0; i < listeProduit.size(); i++) {
-            if (listeProduit.get(i).getCodeProduit().equals(produitASupprimer.getCodeProduit())) {
-                listeProduit.remove(i);
-            }
-            else{
-                System.out.println("Le produit n'existe pas");
+        try (Scanner sc = new Scanner(System.in)) {
+            String str1 = sc.nextLine();
+            Produit produitASupprimer = new Produit(str1, null);
+            for (int i = 0; i < listeProduit.size(); i++) {
+                if (listeProduit.get(i).getCodeProduit().equals(produitASupprimer.getCodeProduit())) {
+                    listeProduit.remove(i);
+                }
+                else{
+                    System.out.println("Le produit n'existe pas");
+                }
             }
         }
     } 
 
     public void modifierProduit(){
         System.out.println("Quelle est le code du produit que vous souhaitez modifier?");
-        Scanner sc = new Scanner(System.in);
-        String str1 = sc.nextLine();
-        System.out.println("Souhaitez vous modifier la description ? (Y/N)");
-        String d = sc.nextLine();
-        System.out.println("Souhaitez vous modifier le code du produit ? (Y/N)");
-        String c = sc.nextLine();
-        Produit produitASupprimer = new Produit(str1, null);
-        for (int i = 0; i < listeProduit.size(); i++) {
-            if (listeProduit.get(i).getCodeProduit().equals(produitASupprimer.getCodeProduit())) {
-                if(d.equalsIgnoreCase("Y")){
-                    System.out.println("Quelle est la nouvelle description ?");
-                    String d1 = sc.nextLine();
-                    listeProduit.get(i).setdProduit(d1);
+        try (Scanner sc = new Scanner(System.in)) {
+            String str1 = sc.nextLine();
+            System.out.println("Souhaitez vous modifier la description ? (Y/N)");
+            String d = sc.nextLine();
+            System.out.println("Souhaitez vous modifier le code du produit ? (Y/N)");
+            String c = sc.nextLine();
+            Produit produitASupprimer = new Produit(str1, null);
+            for (int i = 0; i < listeProduit.size(); i++) {
+                if (listeProduit.get(i).getCodeProduit().equals(produitASupprimer.getCodeProduit())) {
+                    if(d.equalsIgnoreCase("Y")){
+                        System.out.println("Quelle est la nouvelle description ?");
+                        String d1 = sc.nextLine();
+                        listeProduit.get(i).setdProduit(d1);
+                    }
+                    if(c.equalsIgnoreCase("Y")){
+                        System.out.println("Quel est le nouveau code de ce produit ?");
+                        String c1 = sc.nextLine();
+                        listeProduit.get(i).setCodeProduit(c1);
+                    }
                 }
-                if(c.equalsIgnoreCase("Y")){
-                    System.out.println("Quel est le nouveau code de ce produit ?");
-                    String c1 = sc.nextLine();
-                    listeProduit.get(i).setCodeProduit(c1);
+                else{
+                    System.out.println("Ce produit n'existe pas");
                 }
+                
             }
-            else{
-                System.out.println("Ce produit n'existe pas");
-            }
-            
         }
     }
 }
