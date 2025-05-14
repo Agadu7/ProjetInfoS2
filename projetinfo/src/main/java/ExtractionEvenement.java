@@ -9,7 +9,7 @@ public class ExtractionEvenement {
 
         String ligneLue;
         while ((ligneLue = in.readLine()) != null) {
-            StringTokenizer t = new StringTokenizer(ligneLue, " ");
+            StringTokenizer t = new StringTokenizer(ligneLue, ";");
             String machine = t.nextToken();
             String evenement = t.nextToken(); 
 
