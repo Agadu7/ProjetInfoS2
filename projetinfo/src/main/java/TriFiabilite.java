@@ -3,16 +3,18 @@ import java.util.*;
 
 public class TriFiabilite {
     private Map<String, Integer> fiabiliteParMachine = new HashMap<>();
-    private Set<String> evenementsPositifs = new HashSet<>(Arrays.asList("OK", "Maintenance réussie"));
+    private Set<String> evenementsPositifs = new HashSet<>(Arrays.asList("ok", "maintenance réussie"));
 
     public void chargerFiabilite(String cheminFichier) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(cheminFichier));
-
         String ligneLue;
+
         while ((ligneLue = in.readLine()) != null) {
-            StringTokenizer t = new StringTokenizer(ligneLue, " ");
-            String machine = t.nextToken();
-            String evenement = t.nextToken();
+            String[] champs = ligneLue.split(";");
+            if (champs.length < 6) continue; // Ignore les lignes invalides
+
+            String machine = champs[2]; // 3e champ
+            String evenement = champs[3]; // 4e champ
 
             fiabiliteParMachine.putIfAbsent(machine, 0);
             if (evenementsPositifs.contains(evenement)) {
@@ -29,4 +31,5 @@ public class TriFiabilite {
         return listeTriee;
     }
 }
+
 

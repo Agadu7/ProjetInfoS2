@@ -2,7 +2,7 @@ import java.io.IOException;
 import java.util.Map;
 
 public class Main {
-    public static void main(String[] args) {
+   /*  public static void main(String[] args) {
         try {
             ExtractionEvenement extraction = new ExtractionEvenement();
             extraction.chargerEvenements("Suivi/suiviMaintenance.txt");
@@ -23,6 +23,19 @@ public class Main {
         } catch (IOException e) {
             System.out.println("Erreur : " + e.getMessage());
         }
+    }*/
+    public static void main(String[] args) {
+        TriFiabilite tf = new TriFiabilite();
+        try {
+            tf.chargerFiabilite("suiviMaintenance.txt");
+
+            for (Map.Entry<String, Integer> entry : tf.getMachinesTriees()) {
+                System.out.println(entry.getKey() + " : " + entry.getValue());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
+
 
