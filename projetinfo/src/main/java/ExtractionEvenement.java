@@ -11,7 +11,7 @@ class EvenementMachine {
     public EvenementMachine(Date horodatage, String type, String evenement) {
         this.horodatage = horodatage;
         this.type = type;
-        this.evenement = evenement.toLowerCase();
+        this.evenement = evenement;
     }
 }
 
@@ -50,5 +50,3 @@ public class ExtractionEvenement {
         return evenementsParMachine;
     }
 }
-
-

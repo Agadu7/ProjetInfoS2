@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.*;
 
 public class CalculFiabilite {
@@ -33,7 +32,17 @@ public class CalculFiabilite {
                     machine, fiabilite, cumulFonctionnement, dureeObservation);
         }
     }
+
+    public static void main(String[] args) {
+        try {
+            ExtractionEvenement extracteur = new ExtractionEvenement();
+            extracteur.chargerEvenements("suiviMaintenance.txt");
+
+            CalculFiabilite calc = new CalculFiabilite();
+            calc.calculerFiabilite(extracteur.getEvenementsParMachine());
+
+        } catch (IOException e) {
+            System.out.println("Erreur de lecture : " + e.getMessage());
+        }
+    }
 }
-
-
-

@@ -100,4 +100,15 @@ public class Gamme {
             }
         }
     }
+
+    public void ajouterProduit(){
+        System.out.println("Quel est le code du produit ?");
+        try (Scanner sc = new Scanner(System.in)) {
+            String str1 = sc.nextLine();
+            System.out.println("Quelle est la description du produit ?");
+            String str2 = sc.nextLine();
+            Produit produit = new Produit(str1, str2);
+            listeProduit.add(produit);
+        }
+    }
 }
