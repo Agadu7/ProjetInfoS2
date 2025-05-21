@@ -7,6 +7,8 @@ public class Atelier {
     private ArrayList<Machine> listeMachine;
     private ArrayList<Poste> listePoste;
     private ArrayList<Gamme> listeGamme;
+    private Map<String, Integer> fiabiliteParMachine = new HashMap<>();
+    private Set<String> evenementsPositifs = new HashSet<>(Arrays.asList("OK", "Maintenance réussie"));
 
     public int getCodeAtelier() {
         return codeAtelier;
@@ -270,4 +272,92 @@ public class Atelier {
             }
         }
     }
+    public void calculerFiabilite(Map<String, List<EvenementMachine>> donnees) {
+        for (String machine : donnees.keySet()) {
+            List<EvenementMachine> evenements = donnees.get(machine);
+            evenements.sort(Comparator.comparing(e -> e.horodatage));
+
+            long cumulFonctionnement = 0;
+            Date debutObservation = evenements.get(0).horodatage;
+            Date finObservation = evenements.get(evenements.size() - 1).horodatage;
+
+            Date heureDebut = null;
+
+            for (EvenementMachine e : evenements) {
+                if (e.type.equals("A")) {
+                    heureDebut = e.horodatage;
+                } else if (e.type.equals("D") && heureDebut != null &&
+                          (e.evenement.equals("ok") || e.evenement.equals("maintenance réussie"))) {
+                    long duree = (e.horodatage.getTime() - heureDebut.getTime()) / (1000 * 60);
+                    if (duree > 0) cumulFonctionnement += duree;
+                    heureDebut = null;
+                }
+            }
+
+            long dureeObservation = (finObservation.getTime() - debutObservation.getTime()) / (1000 * 60);
+            double fiabilite = dureeObservation > 0 ? (double) cumulFonctionnement / dureeObservation : 0;
+
+            System.out.printf("Machine : %-7s | Fiabilité : %.2f (%d min fonctionnement / %d min observés)%n",
+                    machine, fiabilite, cumulFonctionnement, dureeObservation);
+        }
+    }
+    
+    public void chargerFiabilite(String cheminFichier) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(cheminFichier));
+
+        String ligneLue;
+        while ((ligneLue = in.readLine()) != null) {
+            StringTokenizer t = new StringTokenizer(ligneLue, ";");
+            String machine = t.nextToken();
+            String evenement = t.nextToken();
+
+            fiabiliteParMachine.putIfAbsent(machine, 0);
+            if (evenementsPositifs.contains(evenement)) {
+                fiabiliteParMachine.put(machine, fiabiliteParMachine.get(machine) + 1);
+            }
+        }
+
+        in.close();
+    }
+
+    public int getFiabilite(String machine) {
+        return fiabiliteParMachine.getOrDefault(machine, 0);
+    }
+
+    public void chargerEvenements(String cheminFichier) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader("projetinfo\\src\\main\\java\\suiviMaintenance.txt"));
+        String ligne;
+
+        while ((ligne = in.readLine()) != null) {
+            String[] champs = ligne.split(";");
+            if (champs.length < 6) continue;
+
+            String date = champs[0];
+            String heure = champs[1];
+            String machine = champs[2];
+            String type = champs[3];
+            String evenement = champs[5];
+
+            try {
+                Date horodatage = formatDate.parse(date + " " + heure);
+                EvenementMachine ev = new EvenementMachine(horodatage, type, evenement);
+                evenementsParMachine.putIfAbsent(machine, new ArrayList<>());
+                evenementsParMachine.get(machine).add(ev);
+            } catch (Exception e) {
+                System.out.println("Erreur de parsing pour la ligne : " + ligne);
+            }
+        }
+
+        in.close();
+    }
+
+    public Map<String, List<EvenementMachine>> getEvenementsParMachine() {
+        return evenementsParMachine;
+    }
+    public EvenementMachine(Date horodatage, String type, String evenement) {
+        this.horodatage = horodatage;
+        this.type = type;
+        this.evenement = evenement;
+    }
 }
+
