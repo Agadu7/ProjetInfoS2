@@ -296,9 +296,6 @@ public class Atelier {
 
             long dureeObservation = (finObservation.getTime() - debutObservation.getTime()) / (1000 * 60);
             double fiabilite = dureeObservation > 0 ? (double) cumulFonctionnement / dureeObservation : 0;
-
-            System.out.printf("Machine : %-7s | Fiabilité : %.2f (%d min fonctionnement / %d min observés)%n",
-                    machine, fiabilite, cumulFonctionnement, dureeObservation);
         }
     }
     
@@ -324,7 +321,7 @@ public class Atelier {
         return fiabiliteParMachine.getOrDefault(machine, 0);
     }
 
-    public void chargerEvenements(String cheminFichier) throws IOException {
+    private void chargerEvenements(String cheminFichier) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader("projetinfo\\src\\main\\java\\suiviMaintenance.txt"));
         String ligne;
 
