@@ -1,5 +1,19 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Atelier {
     private int codeAtelier;
@@ -272,7 +286,44 @@ public class Atelier {
             }
         }
     }
-    public void calculerFiabilite(Map<String, List<EvenementMachine>> donnees) {
+    
+    public void sauvegarderAtelier(String cheminFichier) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter(cheminFichier))) {
+        writer.println(codeAtelier);
+
+        // Personnes
+        writer.println("Personnes:");
+        for (Personne p : listePersonne) {
+            writer.println(p.getNom()+ ";" + p.getPrenom() + ";" + p.getCode());
+        }
+           
+        // Machines
+        writer.println("Machines:");
+        for (Machine m : listeMachine) {
+            writer.println(m.getRefMachine() + ";" + m.getdMachine() + ";" + m.getX() + ";" + m.getY() + ";" + m.getType() + ";" + m.getCout());
+        }
+           
+        // Postes
+        writer.println("Postes:");
+        for (Poste p : listePoste) {
+            writer.println(p.getRefPoste() + ";" + p.getdPoste()+";"+p.getListeMachine());
+        }
+           
+        // Gammes
+        writer.println("Gammes:");
+        for (Gamme g : listeGamme) {
+            writer.println(g.getListeMachine() + ";" + g.getRefGamme()+";"+g.getListeOperation()+";"+g.getListeEquipement()+";"+g.getListeProduit());
+        }
+            
+        System.out.println("Atelier sauvegardé avec succès !");
+        }
+            
+        catch (IOException e) {
+          e.printStackTrace();
+        }
+    }
+
+    public void calculerFiabilite(Map<String, List<EvenementMachine> donnees) {
         for (String machine : donnees.keySet()) {
             List<EvenementMachine> evenements = donnees.get(machine);
             evenements.sort(Comparator.comparing(e -> e.horodatage));
