@@ -6,6 +6,7 @@ public class Atelier {
     private ArrayList<Personne> listePersonne;
     private ArrayList<Machine> listeMachine;
     private ArrayList<Poste> listePoste;
+    private ArrayList<Gamme> listeGamme;
 
     public int getCodeAtelier() {
         return codeAtelier;
@@ -22,11 +23,12 @@ public class Atelier {
         this.listePersonne = listePersonne;
     }
 
-    public Atelier (int codeAtelier,ArrayList<Personne> listePersonne,ArrayList<Machine> listeMachine,ArrayList<Poste> listePoste){
+    public Atelier (int codeAtelier,ArrayList<Personne> listePersonne,ArrayList<Machine> listeMachine,ArrayList<Poste> listePoste, ArrayList<Gamme> listeGamme){
         this.codeAtelier=codeAtelier;
         this.listePersonne=listePersonne;
         this.listePoste=listePoste;
         this.listeMachine=listeMachine;
+        this.listeGamme=listeGamme;
     }
 
     public ArrayList<Machine> getListeMachine() {
@@ -44,6 +46,15 @@ public class Atelier {
     public void setListePoste(ArrayList<Poste> listePoste) {
         this.listePoste = listePoste;
     }
+
+    public ArrayList<Gamme> getListeGamme() {
+        return listeGamme;
+    }
+
+    public void setListeGamme(ArrayList<Gamme> listeGamme) {
+        this.listeGamme = listeGamme;
+    }
+
 
     public void affichePoste(){
         for (int i = 0; i < this.listePoste.size(); i++) {
@@ -215,5 +226,48 @@ public class Atelier {
             }
         }
     }
+
+    public void afficheGamme(){
+        for (int i=0; i<this.listeGamme.size(); i++){
+            System.out.println("Gamme "+i+": "+this.listeGamme.get(i));
+        }
+    }
+
+    public void supprimerGamme(){
+        System.out.println("Quelle gamme voulez-vous supprimer ?");
+          try (Scanner sc = new Scanner(System.in)) {
+            String str1 = sc.nextLine();
+            Gamme gammeASupprimer = new Gamme(null, str1, null, null, null);
+            for (int i = 0; i < listeGamme.size(); i++) {
+                if (listeGamme.get(i).getRefGamme().equals(gammeASupprimer.getRefGamme())) {
+                    listeGamme.remove(i);
+                }
+                else{
+                    System.out.println("La gamme n'existe pas");
+                }
+            }
+        }
+    }
     
+    public void modifierGamme(){
+        System.out.println("Quelle est la gamme que vous souhaitez modifier?");
+        try (Scanner sc = new Scanner(System.in)) {
+            String str1 = sc.nextLine();
+            System.out.println("Souhaitez-vous modifier la reférence de la gamme ? (Y/N)");
+            String r = sc.nextLine();
+            Gamme gammeAModifier = new Gamme(null, str1, null, null, null);
+            for (int i=0; i < listeGamme.size(); i++){
+                if (listeGamme.get(i).getRefGamme().equals(gammeAModifier.getRefGamme())){
+                    if (r.equalsIgnoreCase("Y")){
+                        System.out.println("Quelle est la nouvelle reférence de cette gamme ?");
+                        String r1 = sc.nextLine();
+                        listeGamme.get(i).setRefGamme(r1);
+                    }
+                }
+                else{
+                    System.out.println("Cette gamme n'existe pas");
+                }
+            }
+        }
+    }
 }
