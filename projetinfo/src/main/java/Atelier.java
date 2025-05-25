@@ -287,41 +287,82 @@ public class Atelier {
         }
     }
     
-    public void sauvegarderAtelier(String cheminFichier) {
-        try (PrintWriter writer = new PrintWriter(new FileWriter(cheminFichier))) {
+    public void sauvegarderAtelier(String nomFichier) { 
+        try (PrintWriter writer = new PrintWriter(new FileWriter(nomFichier))) {
         writer.println(codeAtelier);
-
-        // Personnes
+        
         writer.println("Personnes:");
         for (Personne p : listePersonne) {
-            writer.println(p.getNom()+ ";" + p.getPrenom() + ";" + p.getCode());
+            writer.println(p.convertirEnLignePersonne());
         }
-           
-        // Machines
+
         writer.println("Machines:");
         for (Machine m : listeMachine) {
-            writer.println(m.getRefMachine() + ";" + m.getdMachine() + ";" + m.getX() + ";" + m.getY() + ";" + m.getType() + ";" + m.getCout());
+            writer.println(m.convertirEnLigneMachine());
         }
-           
-        // Postes
+
         writer.println("Postes:");
         for (Poste p : listePoste) {
-            writer.println(p.getRefPoste() + ";" + p.getdPoste()+";"+p.getListeMachine());
+            writer.println(p.convertirEnLignePoste());
         }
-           
-        // Gammes
+
         writer.println("Gammes:");
         for (Gamme g : listeGamme) {
-            writer.println(g.getListeMachine() + ";" + g.getRefGamme()+";"+g.getListeOperation()+";"+g.getListeEquipement()+";"+g.getListeProduit());
+            writer.println(g.convertirEnLigneGamme());
         }
-            
+
         System.out.println("Atelier sauvegardé avec succès !");
         }
-            
+
         catch (IOException e) {
-          e.printStackTrace();
+            System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
         }
     }
+
+    public static Atelier chargerAtelier(String nomFichier) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
+        int code = Integer.parseInt(reader.readLine());
+
+        ArrayList<Personne> personnes = new ArrayList<>();
+        ArrayList<Machine> machines = new ArrayList<>();
+        ArrayList<Poste> postes = new ArrayList<>();
+        ArrayList<Gamme> gammes = new ArrayList<>();
+
+        String line;
+        String section = "";
+
+        while ((line = reader.readLine()) != null) {
+            if (line.equals("Personnes:") || line.equals("Machines:") || line.equals("Postes:") || line.equals("Gammes:")) {
+                section = line;
+                continue;
+            }
+
+            switch (section) {
+                case "Personnes:":
+                    personnes.add(Personne.convertirEnObjetPersonne(line));
+                    break;
+                case "Machines:":
+                    machines.add(Machine.convertirEnObjetMachine(line));
+                    break;
+                case "Postes:":
+                    postes.add(Poste.convertirEnObjetPoste(line, machines));
+                    break;
+                case "Gammes:":
+                    gammes.add(Gamme.convertirEnObjetGamme(line));
+                    break;
+            }
+        }
+
+        return new Atelier(code, personnes, machines, postes, gammes);
+        }
+
+        catch (IOException | NumberFormatException e) {
+            System.err.println("Erreur lors du chargement : " + e.getMessage());
+        return null;
+        }
+    }
+
+    
 
     public void calculerFiabilite(Map<String, List<EvenementMachine> donnees) {
         for (String machine : donnees.keySet()) {

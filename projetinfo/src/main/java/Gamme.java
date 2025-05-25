@@ -111,4 +111,10 @@ public class Gamme {
             listeProduit.add(produit);
         }
     }
+
+    public String convertirEnLigneGamme(){
+        return listeMachine + ";" + refGamme + ";" + listeOperation + ";" + listeEquipement + ";" + listeProduit;
+    }
+
+    
 }

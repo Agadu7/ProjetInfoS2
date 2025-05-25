@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+
 
 public class Personne {
     private String nom;
@@ -24,10 +24,19 @@ public class Personne {
         this.code = code;
     }
 
-    public Personne(ArrayList<Personne> listePersonne,String nom,String prenom,int code){
+    public Personne(String nom,String prenom,int code){
         this.code = code;
         this.nom = nom;
         this.prenom = prenom;
+    }
+
+    public String convertirEnLignePersonne(){
+        return nom + ";" + prenom + ";" + code;
+    }
+
+    public static Personne convertirEnObjetPersonne(String ligne) {
+        String[] parts = ligne.split(";");
+        return new Personne(parts[0], parts[1], Integer.parseInt(parts[2]));
     }
 
 }

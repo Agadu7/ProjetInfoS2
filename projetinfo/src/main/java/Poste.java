@@ -29,4 +29,14 @@ public class Poste {
     public void setListeMachine(ArrayList<Machine> listeMachine) {
         this.listeMachine = listeMachine;
     }
+
+    public String convertirEnLignePoste(){
+        
+        return refPoste + ";" + dPoste + ";" + listeMachine;
+    }
+
+    public static Poste convertirEnObjetPoste(String ligne, ArrayList<Machine> machines){
+        String[] parts = ligne.split(";");
+        return new Poste(parts[0], parts[1], machines);
+    }
 }
