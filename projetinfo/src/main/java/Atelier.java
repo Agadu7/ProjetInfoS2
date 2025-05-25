@@ -49,13 +49,6 @@ public class Atelier {
         this.listeMachine=listeMachine;
         this.listeGamme=listeGamme;
     }
-    public Atelier() {
-        this.codeAtelier = 0;
-        this.listePersonne = new ArrayList<>();
-        this.listeMachine = new ArrayList<>();
-        this.listePoste = new ArrayList<>();
-        this.listeGamme = new ArrayList<>();
-    }
 
     public ArrayList<Machine> getListeMachine() {
         return listeMachine;
