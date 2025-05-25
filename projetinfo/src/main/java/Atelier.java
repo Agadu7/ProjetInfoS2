@@ -19,7 +19,7 @@ import java.text.ParseException;
 
 public class Atelier {
     private int codeAtelier;
-    private ArrayList<Personne> listePersonne;
+    private ArrayList<Operateur> listeOperateur;
     private ArrayList<Machine> listeMachine;
     private ArrayList<Poste> listePoste;
     private ArrayList<Gamme> listeGamme;
@@ -35,16 +35,16 @@ public class Atelier {
         this.codeAtelier = codeAtelier;
     }
     
-    public ArrayList<Personne> getListePersonne() {
-        return listePersonne;
+    public ArrayList<Operateur> getListeoperateur() {
+        return listeOperateur;
     }
-    public void setListePersonne(ArrayList<Personne> listePersonne) {
-        this.listePersonne = listePersonne;
+    public void setListePersonne(ArrayList<Operateur> listeOperateur) {
+        this.listeOperateur = listeOperateur;
     }
 
-    public Atelier (int codeAtelier,ArrayList<Personne> listePersonne,ArrayList<Machine> listeMachine,ArrayList<Poste> listePoste, ArrayList<Gamme> listeGamme){
+    public Atelier (int codeAtelier,ArrayList<Operateur> listeOperateur,ArrayList<Machine> listeMachine,ArrayList<Poste> listePoste, ArrayList<Gamme> listeGamme){
         this.codeAtelier=codeAtelier;
-        this.listePersonne=listePersonne;
+        this.listeOperateur=listeOperateur;
         this.listePoste=listePoste;
         this.listeMachine=listeMachine;
         this.listeGamme=listeGamme;
@@ -301,9 +301,9 @@ public class Atelier {
         try (PrintWriter writer = new PrintWriter(new FileWriter(nomFichier))) {
         writer.println(codeAtelier);
         
-        writer.println("Personnes:");
-        for (Personne p : listePersonne) {
-            writer.println(p.convertirEnLignePersonne());
+        writer.println("Operateurs:");
+        for (Operateur p : listeOperateur) {
+            writer.println(p.convertirEnLigneOperateur());
         }
 
         writer.println("Machines:");
@@ -333,7 +333,7 @@ public class Atelier {
         try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
         int code = Integer.parseInt(reader.readLine());
 
-        ArrayList<Personne> personnes = new ArrayList<>();
+        ArrayList<Operateur> operateurs = new ArrayList<>();
         ArrayList<Machine> machines = new ArrayList<>();
         ArrayList<Poste> postes = new ArrayList<>();
         ArrayList<Gamme> gammes = new ArrayList<>();
@@ -342,14 +342,14 @@ public class Atelier {
         String section = "";
 
         while ((line = reader.readLine()) != null) {
-            if (line.equals("Personnes:") || line.equals("Machines:") || line.equals("Postes:") || line.equals("Gammes:")) {
+            if (line.equals("Operateurs:") || line.equals("Machines:") || line.equals("Postes:") || line.equals("Gammes:")) {
                 section = line;
                 continue;
             }
 
             switch (section) {
                 case "Personnes:":
-                    personnes.add(Personne.convertirEnObjetPersonne(line));
+                    operateurs.add(Operateur.convertirEnObjetOperateur(line));
                     break;
                 case "Machines:":
                     machines.add(Machine.convertirEnObjetMachine(line));
@@ -363,7 +363,7 @@ public class Atelier {
             }
         }
 
-        return new Atelier(code, personnes, machines, postes, gammes);
+        return new Atelier(code, operateurs, machines, postes, gammes);
         }
 
         catch (IOException | NumberFormatException e) {
