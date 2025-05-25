@@ -18,7 +18,7 @@ public class CalculFiabilite {
                 if (e.type.equals("A")) {
                     heureDebut = e.horodatage;
                 } else if (e.type.equals("D") && heureDebut != null &&
-                          (e.evenement.equals("ok") || e.evenement.equals("maintenance réussie"))) {
+                          (e.evenement.equals("ok") || e.evenement.equals("projetinfo/src/main/java/maintenance réussie"))) {
                     long duree = (e.horodatage.getTime() - heureDebut.getTime()) / (1000 * 60);
                     if (duree > 0) cumulFonctionnement += duree;
                     heureDebut = null;
