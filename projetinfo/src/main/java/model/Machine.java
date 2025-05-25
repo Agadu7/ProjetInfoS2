@@ -1,3 +1,5 @@
+package model;
+
 public class Machine {
     private String refMachine;
     private String dMachine;

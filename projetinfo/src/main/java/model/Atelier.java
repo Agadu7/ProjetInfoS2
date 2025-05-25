@@ -1,3 +1,5 @@
+package model;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -351,7 +353,7 @@ public class Atelier {
                     postes.add(Poste.convertirEnObjetPoste(line, machines));
                     break;
                 case "Gammes:":
-                    gammes.add(Gamme.convertirEnLigneGamme(line));
+                    //gammes.add(Gamme.convertirEnLigneGamme(line));
                     break;
             }
         }

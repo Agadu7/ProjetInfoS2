@@ -1,3 +1,5 @@
+package model;
+
 public class ChefAtelier {
     private String nom;
     private Atelier atelier;

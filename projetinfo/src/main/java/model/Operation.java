@@ -1,3 +1,5 @@
+package model;
+
 public class Operation {
     private String refOperation;
     private String dOperation;

@@ -1,3 +1,5 @@
+package model;
+
 public class Produit {
     private String codeProduit;
     private String dProduit;

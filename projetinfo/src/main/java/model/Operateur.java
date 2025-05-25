@@ -1,3 +1,5 @@
+package model;
+
 public class Operateur {
     private String code;
     private String nom;
