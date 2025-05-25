@@ -14,6 +14,8 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class Atelier {
     private int codeAtelier;
@@ -23,6 +25,7 @@ public class Atelier {
     private ArrayList<Gamme> listeGamme;
     private Map<String, Integer> fiabiliteParMachine = new HashMap<>();
     private Set<String> evenementsPositifs = new HashSet<>(Arrays.asList("OK", "Maintenance réussie"));
+    private Map<String, List<EvenementMachine>> evenementsParMachine = new HashMap<>();
 
     public int getCodeAtelier() {
         return codeAtelier;
@@ -45,6 +48,13 @@ public class Atelier {
         this.listePoste=listePoste;
         this.listeMachine=listeMachine;
         this.listeGamme=listeGamme;
+    }
+    public Atelier() {
+        this.codeAtelier = 0;
+        this.listePersonne = new ArrayList<>();
+        this.listeMachine = new ArrayList<>();
+        this.listePoste = new ArrayList<>();
+        this.listeGamme = new ArrayList<>();
     }
 
     public ArrayList<Machine> getListeMachine() {
@@ -348,7 +358,7 @@ public class Atelier {
                     postes.add(Poste.convertirEnObjetPoste(line, machines));
                     break;
                 case "Gammes:":
-                    gammes.add(Gamme.convertirEnObjetGamme(line));
+                    gammes.add(Gamme.convertirEnLigneGamme(line));
                     break;
             }
         }
@@ -364,7 +374,7 @@ public class Atelier {
 
     
 
-    public void calculerFiabilite(Map<String, List<EvenementMachine> donnees) {
+    public void calculerFiabilite(Map<String, List<EvenementMachine>> donnees) {
         for (String machine : donnees.keySet()) {
             List<EvenementMachine> evenements = donnees.get(machine);
             evenements.sort(Comparator.comparing(e -> e.horodatage));
@@ -391,62 +401,43 @@ public class Atelier {
         }
     }
     
-    public void chargerFiabilite(String cheminFichier) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader(cheminFichier));
+    public void chargerFiabilite(String suiviMaintenance) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader("suiviMaintenance.txt"));
 
         String ligneLue;
         while ((ligneLue = in.readLine()) != null) {
-            StringTokenizer t = new StringTokenizer(ligneLue, ";");
-            String machine = t.nextToken();
-            String evenement = t.nextToken();
-
-            fiabiliteParMachine.putIfAbsent(machine, 0);
-            if (evenementsPositifs.contains(evenement)) {
-                fiabiliteParMachine.put(machine, fiabiliteParMachine.get(machine) + 1);
-            }
+            String[] t = ligneLue.split(";");
+        if (t.length < 6) continue;
+        String machine = t[2];
+        String evenement = t[5].toLowerCase(); // pour gérer "ok" ou "OK"
+        fiabiliteParMachine.putIfAbsent(machine, 0);
+        if (evenementsPositifs.contains(evenement.toLowerCase())) {
+            fiabiliteParMachine.put(machine, fiabiliteParMachine.get(machine) + 1);
         }
-
-        in.close();
+        // Remplir la map des événements par machine si besoin :
+        EvenementMachine ev = new EvenementMachine(
+            parseDate(t[0], t[1]), t[3], evenement, machine
+        );
+        evenementsParMachine.computeIfAbsent(machine, k -> new ArrayList<>()).add(ev);
     }
+    in.close();
+    }
+    // Méthode utilitaire pour parser la date
+private Date parseDate(String date, String heure) {
+    try {
+        return new SimpleDateFormat("ddMMyyyy HH:mm").parse(date + " " + heure);
+    } catch (ParseException e) {
+        return null;
+    }
+}
 
     public int getFiabilite(String machine) {
         return fiabiliteParMachine.getOrDefault(machine, 0);
     }
 
-    private void chargerEvenements(String cheminFichier) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader("projetinfo\\src\\main\\java\\suiviMaintenance.txt"));
-        String ligne;
-
-        while ((ligne = in.readLine()) != null) {
-            String[] champs = ligne.split(";");
-            if (champs.length < 6) continue;
-
-            String date = champs[0];
-            String heure = champs[1];
-            String machine = champs[2];
-            String type = champs[3];
-            String evenement = champs[5];
-
-            try {
-                Date horodatage = formatDate.parse(date + " " + heure);
-                EvenementMachine ev = new EvenementMachine(horodatage, type, evenement);
-                evenementsParMachine.putIfAbsent(machine, new ArrayList<>());
-                evenementsParMachine.get(machine).add(ev);
-            } catch (Exception e) {
-                System.out.println("Erreur de parsing pour la ligne : " + ligne);
-            }
-        }
-
-        in.close();
-    }
-
     public Map<String, List<EvenementMachine>> getEvenementsParMachine() {
         return evenementsParMachine;
     }
-    public EvenementMachine(Date horodatage, String type, String evenement) {
-        this.horodatage = horodatage;
-        this.type = type;
-        this.evenement = evenement;
-    }
+    
 }
 
