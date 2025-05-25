@@ -42,8 +42,8 @@ public class MachineHandler {
         addButton.setOnAction(e -> {
             try {
                 String name = nameField.getText().trim();
-                String description = descField.getText().trim();
-                String reference = refField.getText().trim();
+                //String description = descField.getText().trim();
+                //String reference = refField.getText().trim();
 
                 double x = Double.parseDouble(xField.getText());
                 double y = Double.parseDouble(yField.getText());

@@ -5,3 +5,4 @@ module vue {
     opens vue to javafx.fxml;
     exports vue;
 }
+
