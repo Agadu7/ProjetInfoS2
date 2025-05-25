@@ -1,39 +1,48 @@
 public class Operateur {
-    private String refOperation;
-    private String dOperation;
-    private String refEquipement;
-    private float dureeOperation;
+    private String code;
+    private String nom;
+    private String prenom;
+    private String competences;
 
-    public Operateur(String refOperation, String dOperation, String refEquipement, float dureeOperation) {
-        this.refOperation = refOperation;
-        this.dOperation=dOperation;
-        this.refEquipement = refEquipement;
-        this.dureeOperation=dureeOperation;
+    public Operateur(String code, String nom, String prenom, String competences) {
+        this.code = code;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.competences = competences;
     }
     
-    public String getRefOperation() {
-        return refOperation;
+    public String getCode() {
+        return code;
     }
-    public void setRefOperation(String refOperation) {
-        this.refOperation = refOperation;
+    public void setCode(String code) {
+        this.code = code;
     }
-    public String getdOperation() {
-        return dOperation;
+    public String getNom() {
+        return nom;
     }
-    public void setdOperation(String dOperation) {
-        this.dOperation = dOperation;
+    public void setNom(String nom) {
+        this.nom = nom;
     }
-    public String getRefEquipement() {
-        return refEquipement;
+    public String getPrenom() {
+        return prenom;
     }
-    public void setRefEquipement(String refEquipement) {
-        this.refEquipement = refEquipement;
+    public void setPrenom(String prenom) {
+        this.prenom = prenom;
     }
-    public float getDureeOperation() {
-        return dureeOperation;
+    public String getCompetences() {
+        return competences;
     }
-    public void setDureeOperation(float dureeOperation) {
-        this.dureeOperation = dureeOperation;
+    public void setCompetences(String competences) {
+        this.competences = competences;
+    }
+
+    public String convertirEnLigneOperateur(){
+        return code + ";" + nom + ";" + prenom + ";" + competences;
+    }
+
+    public static Operateur convertirEnObjetOperateur(String ligne) {
+        String[] parts = ligne.split(";");
+        return new Operateur(parts[0], parts[1], parts[2], parts[3]);
     }
 
     

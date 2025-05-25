@@ -52,4 +52,13 @@ public class Machine {
         this.cout = cout;
     }
 
+    public String convertirEnLigneMachine(){
+        return refMachine + ";" + dMachine + ";" + x + ";" + y + ";" + type + ";" + cout;
+    }
+
+    public static Machine convertirEnObjetMachine(String ligne) {
+        String[] parts = ligne.split(";");
+        return new Machine(parts[0], parts[1], Float.parseFloat(parts[2]), Float.parseFloat(parts[3]), parts[4], Float.parseFloat(parts[5]));
+    }
+
 }

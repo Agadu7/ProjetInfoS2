@@ -1,12 +1,28 @@
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.StringTokenizer;
 
 public class Atelier {
     private int codeAtelier;
-    private ArrayList<Personne> listePersonne;
+    private ArrayList<Operateur> listeOperateur;
     private ArrayList<Machine> listeMachine;
     private ArrayList<Poste> listePoste;
     private ArrayList<Gamme> listeGamme;
+    private Map<String, Integer> fiabiliteParMachine = new HashMap<>();
+    private Set<String> evenementsPositifs = new HashSet<>(Arrays.asList("OK", "Maintenance réussie"));
 
     public int getCodeAtelier() {
         return codeAtelier;
@@ -16,16 +32,16 @@ public class Atelier {
         this.codeAtelier = codeAtelier;
     }
     
-    public ArrayList<Personne> getListePersonne() {
-        return listePersonne;
+    public ArrayList<Operateur> getListeoperateur() {
+        return listeOperateur;
     }
-    public void setListePersonne(ArrayList<Personne> listePersonne) {
-        this.listePersonne = listePersonne;
+    public void setListePersonne(ArrayList<Operateur> listeOperateur) {
+        this.listeOperateur = listeOperateur;
     }
 
-    public Atelier (int codeAtelier,ArrayList<Personne> listePersonne,ArrayList<Machine> listeMachine,ArrayList<Poste> listePoste, ArrayList<Gamme> listeGamme){
+    public Atelier (int codeAtelier,ArrayList<Operateur> listeOperateur,ArrayList<Machine> listeMachine,ArrayList<Poste> listePoste, ArrayList<Gamme> listeGamme){
         this.codeAtelier=codeAtelier;
-        this.listePersonne=listePersonne;
+        this.listeOperateur=listeOperateur;
         this.listePoste=listePoste;
         this.listeMachine=listeMachine;
         this.listeGamme=listeGamme;
@@ -270,4 +286,167 @@ public class Atelier {
             }
         }
     }
+    
+    public void sauvegarderAtelier(String nomFichier) { 
+        try (PrintWriter writer = new PrintWriter(new FileWriter(nomFichier))) {
+        writer.println(codeAtelier);
+        
+        writer.println("Operateurs:");
+        for (Operateur p : listeOperateur) {
+            writer.println(p.convertirEnLigneOperateur());
+        }
+
+        writer.println("Machines:");
+        for (Machine m : listeMachine) {
+            writer.println(m.convertirEnLigneMachine());
+        }
+
+        writer.println("Postes:");
+        for (Poste p : listePoste) {
+            writer.println(p.convertirEnLignePoste());
+        }
+
+        writer.println("Gammes:");
+        for (Gamme g : listeGamme) {
+            writer.println(g.convertirEnLigneGamme());
+        }
+
+        System.out.println("Atelier sauvegardé avec succès !");
+        }
+
+        catch (IOException e) {
+            System.err.println("Erreur lors de la sauvegarde : " + e.getMessage());
+        }
+    }
+
+    public static Atelier chargerAtelier(String nomFichier) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(nomFichier))) {
+        int code = Integer.parseInt(reader.readLine());
+
+        ArrayList<Operateur> operateurs = new ArrayList<>();
+        ArrayList<Machine> machines = new ArrayList<>();
+        ArrayList<Poste> postes = new ArrayList<>();
+        ArrayList<Gamme> gammes = new ArrayList<>();
+
+        String line;
+        String section = "";
+
+        while ((line = reader.readLine()) != null) {
+            if (line.equals("Operateurs:") || line.equals("Machines:") || line.equals("Postes:") || line.equals("Gammes:")) {
+                section = line;
+                continue;
+            }
+
+            switch (section) {
+                case "Personnes:":
+                    operateurs.add(Operateur.convertirEnObjetOperateur(line));
+                    break;
+                case "Machines:":
+                    machines.add(Machine.convertirEnObjetMachine(line));
+                    break;
+                case "Postes:":
+                    postes.add(Poste.convertirEnObjetPoste(line, machines));
+                    break;
+                case "Gammes:":
+                    gammes.add(Gamme.convertirEnObjetGamme(line));
+                    break;
+            }
+        }
+
+        return new Atelier(code, operateurs, machines, postes, gammes);
+        }
+
+        catch (IOException | NumberFormatException e) {
+            System.err.println("Erreur lors du chargement : " + e.getMessage());
+        return null;
+        }
+    }
+
+    
+
+    public void calculerFiabilite(Map<String, List<EvenementMachine> donnees) {
+        for (String machine : donnees.keySet()) {
+            List<EvenementMachine> evenements = donnees.get(machine);
+            evenements.sort(Comparator.comparing(e -> e.horodatage));
+
+            long cumulFonctionnement = 0;
+            Date debutObservation = evenements.get(0).horodatage;
+            Date finObservation = evenements.get(evenements.size() - 1).horodatage;
+
+            Date heureDebut = null;
+
+            for (EvenementMachine e : evenements) {
+                if (e.type.equals("A")) {
+                    heureDebut = e.horodatage;
+                } else if (e.type.equals("D") && heureDebut != null &&
+                          (e.evenement.equals("ok") || e.evenement.equals("maintenance réussie"))) {
+                    long duree = (e.horodatage.getTime() - heureDebut.getTime()) / (1000 * 60);
+                    if (duree > 0) cumulFonctionnement += duree;
+                    heureDebut = null;
+                }
+            }
+
+            long dureeObservation = (finObservation.getTime() - debutObservation.getTime()) / (1000 * 60);
+            double fiabilite = dureeObservation > 0 ? (double) cumulFonctionnement / dureeObservation : 0;
+        }
+    }
+    
+    public void chargerFiabilite(String cheminFichier) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader(cheminFichier));
+
+        String ligneLue;
+        while ((ligneLue = in.readLine()) != null) {
+            StringTokenizer t = new StringTokenizer(ligneLue, ";");
+            String machine = t.nextToken();
+            String evenement = t.nextToken();
+
+            fiabiliteParMachine.putIfAbsent(machine, 0);
+            if (evenementsPositifs.contains(evenement)) {
+                fiabiliteParMachine.put(machine, fiabiliteParMachine.get(machine) + 1);
+            }
+        }
+
+        in.close();
+    }
+
+    public int getFiabilite(String machine) {
+        return fiabiliteParMachine.getOrDefault(machine, 0);
+    }
+
+    private void chargerEvenements(String cheminFichier) throws IOException {
+        BufferedReader in = new BufferedReader(new FileReader("projetinfo\\src\\main\\java\\suiviMaintenance.txt"));
+        String ligne;
+
+        while ((ligne = in.readLine()) != null) {
+            String[] champs = ligne.split(";");
+            if (champs.length < 6) continue;
+
+            String date = champs[0];
+            String heure = champs[1];
+            String machine = champs[2];
+            String type = champs[3];
+            String evenement = champs[5];
+
+            try {
+                Date horodatage = formatDate.parse(date + " " + heure);
+                EvenementMachine ev = new EvenementMachine(horodatage, type, evenement);
+                evenementsParMachine.putIfAbsent(machine, new ArrayList<>());
+                evenementsParMachine.get(machine).add(ev);
+            } catch (Exception e) {
+                System.out.println("Erreur de parsing pour la ligne : " + ligne);
+            }
+        }
+
+        in.close();
+    }
+
+    public Map<String, List<EvenementMachine>> getEvenementsParMachine() {
+        return evenementsParMachine;
+    }
+    public EvenementMachine(Date horodatage, String type, String evenement) {
+        this.horodatage = horodatage;
+        this.type = type;
+        this.evenement = evenement;
+    }
 }
+
