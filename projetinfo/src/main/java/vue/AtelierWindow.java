@@ -13,9 +13,12 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
+import controller.EquipementHandler;
 import controller.GammeHandler;
-import controller.GenericHandler;
 import controller.MachineHandler;
+import controller.OperateurHandler;
+import controller.OperationHandler;
+import controller.PosteHandler;
 import controller.ProduitHandler;
 
 public class AtelierWindow {
@@ -23,6 +26,11 @@ public class AtelierWindow {
     public static final double ATELIER_Y = 50;
     public static final double ATELIER_WIDTH = 600;
     public static final double ATELIER_HEIGHT = 300;
+    public static final List<Machine> MACHINE_DISPONIBLE = new ArrayList<>(Arrays.asList(
+            new Machine("Machine A", 100, 100, 50, 30),
+            new Machine("Machine B", 200, 150, 60, 40),
+            new Machine("Machine C", 300, 200, 70, 50)
+    ));
 
     public static class Machine {
         public double x, y, width, height;
@@ -73,7 +81,7 @@ public class AtelierWindow {
         });
 
         ComboBox<String> entitySelector = new ComboBox<>();
-        entitySelector.getItems().addAll("Machine", "Gamme", "Produit", "Employé", "Poste");
+        entitySelector.getItems().addAll("Machine", "Gamme", "Produit", "Equipement", "Poste","Opération", "Operateur");
         entitySelector.setPromptText("Sélectionner un élément à gérer");
         entitySelector.setStyle("-fx-font-size: 14px;");
 
@@ -92,11 +100,20 @@ public class AtelierWindow {
                 case "Produit":
                     entityControls.getChildren().add(ProduitHandler.getControls());
                     break;
-                case "Employé":
-                    entityControls.getChildren().add(GenericHandler.getControls("Employé"));
+                case "Equipement":
+                    entityControls.getChildren().add(EquipementHandler.getControls());
                     break;
-                case "Poste":
-                    entityControls.getChildren().add(GenericHandler.getControls("Poste"));
+                /*case "Poste":
+                    entityControls.getChildren().add(PosteHandler.getControls(MACHINE_DISPONIBLE));
+                    break;*/
+                case "Opération":
+                    entityControls.getChildren().add(OperationHandler.getControls());
+                    break;
+                case "Operateur":
+                    entityControls.getChildren().add(OperateurHandler.getControls());
+                    break;
+                default:
+                    showAlert("Erreur", "Sélection invalide.");
                     break;
             }
         });

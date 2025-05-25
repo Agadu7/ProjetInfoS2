@@ -1,10 +1,10 @@
 package model;
 
 public class Operation {
-    private String refOperation;
-    private String dOperation;
-    private String refEquipement;
-    private float dureeOperation;
+    public String refOperation;
+    public String dOperation;
+    public String refEquipement;
+    public float dureeOperation;
 
     public Operation(String refOperation, String dOperation, String refEquipement, float dureeOperation) {
         this.refOperation = refOperation;

@@ -1,8 +1,8 @@
 package model;
 
 public class Produit {
-    private String codeProduit;
-    private String dProduit;
+    public String codeProduit;
+    public String dProduit;
 
     public Produit(String codeProduit, String dProduit) {
         this.codeProduit = codeProduit;

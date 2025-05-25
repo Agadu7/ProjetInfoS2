@@ -22,7 +22,7 @@ import java.text.ParseException;
 public class Atelier {
     private int codeAtelier;
     private ArrayList<Operateur> listeOperateur;
-    private ArrayList<Machine> listeMachine;
+    public ArrayList<Machine> listeMachine;
     private ArrayList<Poste> listePoste;
     private ArrayList<Gamme> listeGamme;
     private Map<String, Integer> fiabiliteParMachine = new HashMap<>();
@@ -153,7 +153,7 @@ public class Atelier {
                             System.out.print(" Type de machine ");
                             String type = sc.nextLine();
 
-                            listeMachines.add(new Machine(refMachine, dMachine, x, y, type, cout));
+                            //listeMachines.add(new Machine(refMachine, dMachine, x, y, type, cout));
                         }
                     }
                 }
@@ -175,7 +175,7 @@ public class Atelier {
         System.out.println("Quelle est le poste que vous souhaitez supprimer?");
         try (Scanner sc = new Scanner(System.in)) {
             String str1 = sc.nextLine();
-            Machine machineASupprimer = new Machine(str1, null,0,0,null,0);
+            Machine machineASupprimer = new Machine(str1, null,0,0,null,0, 0, 0);
             for (int i = 0; i < listeMachine.size(); i++) {
                 if (listeMachine.get(i).getRefMachine().equals(machineASupprimer.getRefMachine())) {
                     listeMachine.remove(i);
@@ -203,7 +203,7 @@ public class Atelier {
             String t = sc.nextLine();
             System.out.println("Souhaitez vous modifier le cout du fonctionnement de la machine ? (Y/N)");
             String cout = sc.nextLine();
-            Machine machineAModifer = new Machine(str1, null,0,0,null,0);
+            Machine machineAModifer = new Machine(str1, null,0,0,null,0, 0, 0);
             for (int i = 0; i < listeMachine.size(); i++) {
                 if (listeMachine.get(i).getRefMachine().equals(machineAModifer.getRefMachine())) {
                     if(d.equalsIgnoreCase("Y")){
@@ -237,7 +237,7 @@ public class Atelier {
                         System.out.print("Quel est le nouveau coût de cette machine ? ");
                         float c1 = sc.nextInt();
                         sc.nextLine();
-                        listeMachine.get(i).setCout(c1);
+                        //listeMachine.get(i).setCout(c1);
                     }
                 }
                 else{
@@ -418,13 +418,13 @@ public class Atelier {
     in.close();
     }
     // Méthode utilitaire pour parser la date
-private Date parseDate(String date, String heure) {
-    try {
-        return new SimpleDateFormat("ddMMyyyy HH:mm").parse(date + " " + heure);
-    } catch (ParseException e) {
-        return null;
+    private Date parseDate(String date, String heure) {
+        try {
+            return new SimpleDateFormat("ddMMyyyy HH:mm").parse(date + " " + heure);
+        } catch (ParseException e) {
+            return null;
+        }
     }
-}
 
     public int getFiabilite(String machine) {
         return fiabiliteParMachine.getOrDefault(machine, 0);

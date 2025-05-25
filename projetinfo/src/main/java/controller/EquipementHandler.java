@@ -5,23 +5,23 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import model.Produit;
+import model.Equipement;
 import vue.AtelierWindow;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProduitHandler {
+public class EquipementHandler {
 
-    private static final List<Produit> produits = new ArrayList<>();
+    private static final List<Equipement> equipement = new ArrayList<>();
 
     public static VBox getControls() {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
 
-        ComboBox<Produit> produitSelector = new ComboBox<>();
-        produitSelector.setPromptText("Sélectionner un produit");
-        produitSelector.setItems(FXCollections.observableArrayList(produits));
+        ComboBox<Equipement> produitSelector = new ComboBox<>();
+        produitSelector.setPromptText("Sélectionner un équipement");
+        produitSelector.setItems(FXCollections.observableArrayList(equipement));
 
         TextField codeField = new TextField();
         codeField.setPromptText("Code de référence");
@@ -42,55 +42,55 @@ public class ProduitHandler {
                 AtelierWindow.showAlert("Erreur", "Référence obligatoire.");
                 return;
             }
-            for (Produit p : produits) {
-                if (p.codeProduit.equals(ref)) {
+            for (Equipement p : equipement) {
+                if (p.refEquipement.equals(ref)) {
                     AtelierWindow.showAlert("Erreur", "Référence déjà existante.");
                     return;
                 }
             }
 
-            Produit p = new Produit(
+            Equipement p = new Equipement(
                     ref,
                     descArea.getText().trim()
             );
-            produits.add(p);
-            produitSelector.setItems(FXCollections.observableArrayList(produits));
+            equipement.add(p);
+            produitSelector.setItems(FXCollections.observableArrayList(equipement));
             clearFields(codeField, descArea);
         });
 
         // Sélection d'un produit existant
         produitSelector.setOnAction(e -> {
-            Produit selected = produitSelector.getValue();
+            Equipement selected = produitSelector.getValue();
             if (selected != null) {
-                codeField.setText(selected.codeProduit);
-                descArea.setText(selected.dProduit);
+                codeField.setText(selected.refEquipement);
+                descArea.setText(selected.dEquipement);
                 codeField.setDisable(true); // On évite de modifier la référence
             }
         });
 
         // Modifier
         modifyBtn.setOnAction(e -> {
-            Produit selected = produitSelector.getValue();
+            Equipement selected = produitSelector.getValue();
             if (selected == null) {
                 AtelierWindow.showAlert("Erreur", "Aucun produit sélectionné.");
                 return;
             }
 
-            selected.dProduit = descArea.getText().trim();
-            produitSelector.setItems(FXCollections.observableArrayList(produits));
+            selected.dEquipement = descArea.getText().trim();
+            produitSelector.setItems(FXCollections.observableArrayList(equipement));
             clearFields(codeField, descArea);
             codeField.setDisable(false);
         });
 
         // Supprimer
         deleteBtn.setOnAction(e -> {
-            Produit selected = produitSelector.getValue();
+            Equipement selected = produitSelector.getValue();
             if (selected == null) {
                 AtelierWindow.showAlert("Erreur", "Aucun produit sélectionné.");
                 return;
             }
-            produits.remove(selected);
-            produitSelector.setItems(FXCollections.observableArrayList(produits));
+            equipement.remove(selected);
+            produitSelector.setItems(FXCollections.observableArrayList(equipement));
             clearFields(codeField, descArea);
             codeField.setDisable(false);
         });

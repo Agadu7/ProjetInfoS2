@@ -1,20 +1,25 @@
 package model;
 
 public class Machine {
-    private String refMachine;
-    private String dMachine;
-    private float x;
-    private float y;
-    private String type;
-    private float cout;
+    public String refMachine;
+    public String dMachine;
+    public float x;
+    public float y;
+    public String type;
+    public float cout;
+    public float Largeur;
+    public float Hauteur;
     
-    public Machine(String refMachine, String dMachine, float x, float y, String type, float cout) {
+    public Machine(String refMachine, String dMachine, float x, float y, String type, float cout, float Largeur,
+                    float Hauteur) {
         this.refMachine = refMachine;
         this.x=x;
         this.y=y;
         this.dMachine =dMachine;
         this.cout = cout;
         this.type=type;
+        this.Largeur=Largeur;
+        this.Hauteur=Hauteur;
     }
 
     public String getRefMachine() {
@@ -47,20 +52,27 @@ public class Machine {
     public void setType(String type) {
         this.type = type;
     }
-    public float getCout() {
-        return cout;
+    public float getLargeur() {
+        return Largeur;
     }
-    public void setCout(float cout) {
-        this.cout = cout;
+    public void setLargeur(float Largeur) {
+        this.Largeur = Largeur;
+    }
+    public float getHauteur() {
+        return Hauteur;
+    }
+    public void setHauteur(float Hauteur) {
+        this.Hauteur = Hauteur;
     }
 
     public String convertirEnLigneMachine(){
-        return refMachine + ";" + dMachine + ";" + x + ";" + y + ";" + type + ";" + cout;
+        return refMachine + ";" + dMachine + ";" + x + ";" + y + ";" + type + ";" + cout+ ";" + Largeur + ";" + Hauteur;
     }
 
     public static Machine convertirEnObjetMachine(String ligne) {
         String[] parts = ligne.split(";");
-        return new Machine(parts[0], parts[1], Float.parseFloat(parts[2]), Float.parseFloat(parts[3]), parts[4], Float.parseFloat(parts[5]));
+        return new Machine(parts[0], parts[1], Float.parseFloat(parts[2]), Float.parseFloat(parts[3]), parts[4], 
+        Float.parseFloat(parts[5]), Float.parseFloat(parts[6]), Float.parseFloat(parts[7]));
     }
 
 }

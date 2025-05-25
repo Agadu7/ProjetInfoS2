@@ -1,10 +1,10 @@
 package model;
 
 public class Operateur {
-    private String code;
-    private String nom;
-    private String prenom;
-    private String competences;
+    public String code;
+    public String nom;
+    public String prenom;
+    public String competences;
 
     public Operateur(String code, String nom, String prenom, String competences) {
         this.code = code;

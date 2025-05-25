@@ -1,8 +1,8 @@
 package model;
 
 public class Equipement {
-    private String refEquipement;
-    private String dEquipement;
+    public String refEquipement;
+    public String dEquipement;
 
     public Equipement(String refEquipement, String dEquipement) {
         this.refEquipement = refEquipement;
