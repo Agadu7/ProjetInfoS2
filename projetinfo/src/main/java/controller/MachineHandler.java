@@ -76,7 +76,7 @@ public class MachineHandler {
                 }
 
                 // Vérification des chevauchements
-                for (AtelierWindow.Machine m : AtelierWindow.machines) {
+                for (Machine m : machines) {
                     if (m.overlaps(x, y, width, height)) {
                         AtelierWindow.showAlert("Erreur", "Une machine existe déjà à cet emplacement.");
                         return;
@@ -98,8 +98,8 @@ public class MachineHandler {
                 Color machineColor = colorPicker.getValue();
 
                 // Création et ajout
-                AtelierWindow.Machine machine = new AtelierWindow.Machine(name, x, y, width, height);
-                AtelierWindow.machines.add(machine);
+                Machine machine = new Machine(name, description, x, y, reference, width, height, cout);
+                machines.add(machine);
 
                 // Dessin avec la couleur sélectionnée
                 gc.setFill(machineColor);
@@ -149,7 +149,7 @@ public class MachineHandler {
         styleButton(Fiabilite);
         Fiabilite.setOnAction(e -> {
             String ref = refField.getText().trim();
-            AtelierWindow.Machine selectedMachine = AtelierWindow.machines.stream()
+            Machine selectedMachine = machines.stream()
                     .filter(m -> m.getRefMachine().equals(ref))
                     .findFirst()
                     .orElse(null);

@@ -74,4 +74,11 @@ public class Machine {
         Float.parseFloat(parts[5]), Float.parseFloat(parts[6]), Float.parseFloat(parts[7]));
     }
 
+    public boolean overlaps(float otherX, float otherY, float otherWidth, float otherHeight) {
+        return this.x < otherX + otherWidth &&
+               this.x + this.Largeur > otherX &&
+               this.y < otherY + otherHeight &&
+               this.y + this.Hauteur > otherY;
+    }
+
 }

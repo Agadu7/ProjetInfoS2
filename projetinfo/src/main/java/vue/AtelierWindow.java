@@ -19,8 +19,8 @@ import controller.MachineHandler;
 import controller.OperateurHandler;
 import controller.OperationHandler;
 import controller.PosteHandler;
-//import controller.PosteHandler;
 import controller.ProduitHandler;
+import model.Machine;
 
 public class AtelierWindow {
     public static final double ATELIER_X = 50;
@@ -28,32 +28,10 @@ public class AtelierWindow {
     public static final double ATELIER_WIDTH = 600;
     public static final double ATELIER_HEIGHT = 300;
     public static final List<Machine> MACHINE_DISPONIBLE = new ArrayList<>(Arrays.asList(
-            new Machine("Machine A", 100, 100, 50, 30),
-            new Machine("Machine B", 200, 150, 60, 40),
-            new Machine("Machine C", 300, 200, 70, 50)
+            new Machine("Machine A", "Machine A",100, 100, "Machine A", 50, 30, 30),
+            new Machine("Machine B", "Machine B", 200, 200, "Machine B", 60, 40, 40),
+            new Machine("Machine C", "Machine C", 300, 300, "Machine C", 70, 50, 50)
     ));
-
-    public static class Machine {
-        public double x, y, width, height;
-        public String name;
-
-        public Machine(String name, double x, double y, double width, double height) {
-            this.name = name;
-            this.x = x;
-            this.y = y;
-            this.width = width;
-            this.height = height;
-        }
-
-        public boolean overlaps(double otherX, double otherY, double otherW, double otherH) {
-            return x < otherX + otherW && x + width > otherX && y < otherY + otherH && y + height > otherY;
-        }
-
-        public Object getRefMachine() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getRefMachine'");
-        }
-    }
 
     public static final List<Machine> machines = new ArrayList<>();
 

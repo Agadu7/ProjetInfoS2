@@ -33,7 +33,6 @@ public class Poste {
     }
 
     public String convertirEnLignePoste(){
-        
         return refPoste + ";" + dPoste + ";" + listeMachine;
     }
 
