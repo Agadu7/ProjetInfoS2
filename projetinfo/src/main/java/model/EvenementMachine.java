@@ -9,12 +9,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
     public class EvenementMachine {
         public Date horodatage;
         public String type;
         public String evenement;
         public String machine;
-        private Map<String, List<EvenementMachine>> evenementsParMachine = new HashMap<>();
+        public Map<String, List<EvenementMachine>> evenementsParMachine = new HashMap<>();
         public EvenementMachine(Date horodatage, String type, String evenement, String machine) {
             this.horodatage = horodatage;
             this.type = type;
@@ -22,7 +23,7 @@ import java.util.Map;
             this.machine = machine;
         }
         public void chargerEvenements(String suiviMaintenance) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader("src/main/java/suiviMaintenance.txt"));
+        BufferedReader in = new BufferedReader(new FileReader("suiviMaintenance.txt"));
         String ligne;
         SimpleDateFormat formatDate = new SimpleDateFormat("ddMMyyyy HH:mm");
 
@@ -38,6 +39,7 @@ import java.util.Map;
 
             try {
                 Date horodatage = formatDate.parse(date + " " + heure);
+                System.out.println(horodatage);// Affichage de l'horodatage pour vérification
                 EvenementMachine ev = new EvenementMachine(horodatage, type, evenement, machine);
                 evenementsParMachine.putIfAbsent(machine, new ArrayList<>());
                 evenementsParMachine.get(machine).add(ev);
@@ -48,4 +50,19 @@ import java.util.Map;
 
         in.close();
     }
+    public static void main (String[] args) {
+        EvenementMachine em = new EvenementMachine(new Date(), "Type", "Evenement", "Machine");
+        try {
+            em.chargerEvenements("suiviMaintenance.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        // Affichage des événements par machine
+        for (String machine : em.evenementsParMachine.keySet()) {
+            System.out.println("Machine: " + machine);
+            for (EvenementMachine ev : em.evenementsParMachine.get(machine)) {
+                System.out.println("  " + ev.horodatage + " - " + ev.type + " - " + ev.evenement);
+            }
+        }
     }
+}
