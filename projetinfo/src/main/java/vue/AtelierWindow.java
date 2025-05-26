@@ -18,7 +18,7 @@ import controller.GammeHandler;
 import controller.MachineHandler;
 import controller.OperateurHandler;
 import controller.OperationHandler;
-import controller.PosteHandler;
+//import controller.PosteHandler;
 import controller.ProduitHandler;
 
 public class AtelierWindow {
