@@ -18,6 +18,7 @@ import controller.GammeHandler;
 import controller.MachineHandler;
 import controller.OperateurHandler;
 import controller.OperationHandler;
+import controller.PosteHandler;
 //import controller.PosteHandler;
 import controller.ProduitHandler;
 
@@ -46,6 +47,11 @@ public class AtelierWindow {
 
         public boolean overlaps(double otherX, double otherY, double otherW, double otherH) {
             return x < otherX + otherW && x + width > otherX && y < otherY + otherH && y + height > otherY;
+        }
+
+        public Object getRefMachine() {
+            // TODO Auto-generated method stub
+            throw new UnsupportedOperationException("Unimplemented method 'getRefMachine'");
         }
     }
 
@@ -103,9 +109,9 @@ public class AtelierWindow {
                 case "Equipement":
                     entityControls.getChildren().add(EquipementHandler.getControls());
                     break;
-                /*case "Poste":
+                case "Poste":
                     entityControls.getChildren().add(PosteHandler.getControls(MACHINE_DISPONIBLE));
-                    break;*/
+                    break;
                 case "Opération":
                     entityControls.getChildren().add(OperationHandler.getControls());
                     break;
