@@ -418,7 +418,7 @@ public class Atelier {
     }
 }
     
-    public void chargerFiabilite(String suiviMaintenance) throws IOException {
+    public void chargerFiabilite(Map<String, List<EvenementMachine>> donnees) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader("suiviMaintenance.txt"));
 
         String ligneLue;
@@ -438,6 +438,9 @@ public class Atelier {
         evenementsParMachine.computeIfAbsent(machine, k -> new ArrayList<>()).add(ev);
     }
     in.close();
+        System.out.println("=== Fiabilité par machine ===");
+        for (Map.Entry<String, Integer> entry : fiabiliteParMachine.entrySet()) {
+        System.out.println("Machine : " + entry.getKey() + " → Fiabilité : " + entry.getValue());
     }
     // Méthode pour parser la date
     private Date parseDate(String date, String heure) {
@@ -454,6 +457,15 @@ public class Atelier {
 
     public Map<String, List<EvenementMachine>> getEvenementsParMachine() {
         return evenementsParMachine;
+    }
+    public static void main (String[] args) {
+        EvenementMachine em = new EvenementMachine(new Date(), "Type", "Evenement", "Machine");
+        try {
+            em.chargerEvenements("suiviMaintenance.txt");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+         chargerFiabilite(em.evenementsParMachine);
     }
 }
     
