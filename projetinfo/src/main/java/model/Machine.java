@@ -21,7 +21,6 @@ public class Machine {
         this.Largeur=Largeur;
         this.Hauteur=Hauteur;
     }
-
     public String getRefMachine() {
         return refMachine;
     }
