@@ -64,5 +64,8 @@ import java.util.Map;
                 System.out.println("  " + ev.horodatage + " - " + ev.type + " - " + ev.evenement);
             }
         }
+        chargerFiabilite(em.evenementsParMachine);
     }
+
+   
 }

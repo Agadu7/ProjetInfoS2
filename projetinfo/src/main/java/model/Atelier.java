@@ -1,30 +1,20 @@
 package model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.Set;
 import java.text.SimpleDateFormat;
-import java.text.ParseException;
 
 public class Atelier {
     private int codeAtelier;
-    private ArrayList<Operateur> listeOperateur;
+    public ArrayList<Operateur> listeOperateur;
     public ArrayList<Machine> listeMachine;
-    private ArrayList<Poste> listePoste;
-    private ArrayList<Gamme> listeGamme;
-    private Map<String, Integer> fiabiliteParMachine = new HashMap<>();
-    private Set<String> evenementsPositifs = new HashSet<>(Arrays.asList("OK", "Maintenance réussie"));
-    private Map<String, List<EvenementMachine>> evenementsParMachine = new HashMap<>();
+    public ArrayList<Poste> listePoste;
+    public ArrayList<Gamme> listeGamme;
 
     public int getCodeAtelier() {
         return codeAtelier;
@@ -47,13 +37,6 @@ public class Atelier {
         this.listePoste=listePoste;
         this.listeMachine=listeMachine;
         this.listeGamme=listeGamme;
-    }
-    public Atelier() {
-        this.codeAtelier = 0;
-        this.listeOperateur = new ArrayList<>();
-        this.listeMachine = new ArrayList<>();
-        this.listePoste = new ArrayList<>();
-        this.listeGamme = new ArrayList<>();
     }
 
     public ArrayList<Machine> getListeMachine() {
@@ -130,84 +113,58 @@ public class Atelier {
     public void modifierGamme(){
     }
 
-    public void calculerFiabilite(Map<String, List<EvenementMachine>> donnees) {
+    public double calculerFiabiliteMachineUnique(Map<String, List<EvenementMachine>> donnees, String refMachine) {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    for (String machine : donnees.keySet()) {
-        List<EvenementMachine> evenements = donnees.get(machine);
-        evenements.sort(Comparator.comparing(e -> e.horodatage));
+    List<EvenementMachine> evenements = donnees.get(refMachine);
 
-        // Map pour stocker le cumul de fonctionnement par jour (clé = date au format dd/MM/yyyy)
-        Map<String, Long> cumulParJour = new HashMap<>();
-        // Map pour stocker la durée d'observation par jour (ici, on suppose 24h = 1440 minutes)
-        Map<String, Long> observationParJour = new HashMap<>();
+    evenements.sort(Comparator.comparing(e -> e.horodatage));
 
-        Date heureDebut = null;
-        String jourCourant = null;
+    Map<String, Long> cumulParJour = new HashMap<>();
+    Map<String, Long> observationParJour = new HashMap<>();
 
-        for (EvenementMachine e : evenements) {
-            String jour = sdf.format(e.horodatage);
-            observationParJour.putIfAbsent(jour, 1440L); // 24h en minutes
+    Date heureDebut = null;
+    String jourCourant = null;
 
-            if (e.type.equals("A")) {
-                heureDebut = e.horodatage;
-                jourCourant = jour;
-            } else if (e.type.equals("D") && heureDebut != null &&
-                      (e.evenement.equalsIgnoreCase("ok") || e.evenement.equalsIgnoreCase("maintenance réussie"))) {
-                long duree = (e.horodatage.getTime() - heureDebut.getTime()) / (1000 * 60);
-                if (duree > 0) {
-                    cumulParJour.put(jourCourant, cumulParJour.getOrDefault(jourCourant, 0L) + duree);
-                }
-                heureDebut = null;
+    for (EvenementMachine e : evenements) {
+        String jour = sdf.format(e.horodatage);
+
+        // Heures de fonctionnement = 6h à 20h = 14h = 840 minutes
+        observationParJour.putIfAbsent(jour, 840L);
+
+        int heure = e.horodatage.getHours();
+        if (heure < 6 || heure >= 20) continue;  // En dehors de la plage de fonctionnement
+
+        if (e.type.equals("A")) {
+            heureDebut = e.horodatage;
+            jourCourant = jour;
+        } else if (e.type.equals("D") && heureDebut != null &&
+                (e.evenement.equalsIgnoreCase("ok") || e.evenement.equalsIgnoreCase("maintenance réussie"))) {
+
+            long debut = Math.max(heureDebut.getTime(), getTimeAtHour(heureDebut, 6));
+            long fin = Math.min(e.horodatage.getTime(), getTimeAtHour(heureDebut, 20));
+
+            long duree = (fin - debut) / (1000 * 60);
+            if (duree > 0) {
+                cumulParJour.put(jourCourant, cumulParJour.getOrDefault(jourCourant, 0L) + duree);
             }
-        }
-
-        System.out.println("Fiabilité par jour pour la machine : " + machine);
-        for (String jour : cumulParJour.keySet()) {
-            long cumul = cumulParJour.get(jour);
-            long observation = observationParJour.getOrDefault(jour, 1440L);
-            double fiabilite = observation > 0 ? (double) cumul / observation : 0;
-            System.out.println("  Jour " + jour + " : fiabilité = " + String.format("%.4f", fiabilite));
-        }
-
-    }
-}
-    
-    public void chargerFiabilite(String suiviMaintenance) throws IOException {
-        BufferedReader in = new BufferedReader(new FileReader("suiviMaintenance.txt"));
-
-        String ligneLue;
-        while ((ligneLue = in.readLine()) != null) {
-            String[] t = ligneLue.split(";");
-        if (t.length < 6) continue;
-        String machine = t[2];
-        String evenement = t[5];
-        fiabiliteParMachine.putIfAbsent(machine, 0);
-        if (evenementsPositifs.contains(evenement)) {
-            fiabiliteParMachine.put(machine, fiabiliteParMachine.get(machine) + 1);
-        }
-        // Remplir la map des événements par machine si besoin :
-        EvenementMachine ev = new EvenementMachine(
-            parseDate(t[0], t[1]), t[3], evenement, machine
-        );
-        evenementsParMachine.computeIfAbsent(machine, k -> new ArrayList<>()).add(ev);
-    }
-    in.close();
-    }
-    // Méthode pour parser la date
-    private Date parseDate(String date, String heure) {
-        try {
-            return new SimpleDateFormat("ddMMyyyy HH:mm").parse(date + " " + heure);
-        } catch (ParseException e) {
-            return null;
+            heureDebut = null;
         }
     }
 
-    public int getFiabilite(String machine) {
-        return fiabiliteParMachine.getOrDefault(machine, 0);
+    long totalCumul = cumulParJour.values().stream().mapToLong(Long::longValue).sum();
+    long totalObservation = observationParJour.values().stream().mapToLong(Long::longValue).sum();
+
+    double fiabilite = totalObservation > 0 ? (double) totalCumul / totalObservation : 0;
+
+    return fiabilite;
     }
 
-    public Map<String, List<EvenementMachine>> getEvenementsParMachine() {
-        return evenementsParMachine;
+    private long getTimeAtHour(Date base, int targetHour) {
+        Date copy = new Date(base.getTime());
+        copy.setHours(targetHour);
+        copy.setMinutes(0);
+        copy.setSeconds(0);
+        return copy.getTime();
     }
 }
     
