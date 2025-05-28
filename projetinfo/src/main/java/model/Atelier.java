@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.text.SimpleDateFormat;
 
 public class Atelier {
@@ -114,6 +115,14 @@ public class Atelier {
         copy.setSeconds(0);
         return copy.getTime();
     }
+
+    public boolean check(String refGamme) {
+        Optional<Gamme> gamme = listeGamme.stream()
+                .filter(m -> m.getRefGamme().equals(refGamme))
+                .findFirst();
+        return gamme.isPresent();
+    }
+
 }
     
   

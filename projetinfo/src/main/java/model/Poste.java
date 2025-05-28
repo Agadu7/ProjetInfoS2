@@ -33,4 +33,7 @@ public class Poste {
     public List<Machine> getListeMachine() {
         return listeMachine;
     }
+    public void setListeMachine(List<Machine> listeMachine) {
+        this.listeMachine = new ArrayList<>(listeMachine);
+    }
 }
