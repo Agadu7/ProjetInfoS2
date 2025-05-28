@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
 import java.text.SimpleDateFormat;
 
 public class Atelier {
@@ -62,100 +61,50 @@ public class Atelier {
         this.listeGamme = listeGamme;
     }
 
-
-    public void affichePoste(){
-        for (int i = 0; i < this.listePoste.size(); i++) {
-            System.out.println("Poste "+i+" : "+this.listePoste.get(i));
-          }
-    } 
-     
-    public void supprimerPoste(){
-        System.out.println("Quelle est le poste que vous souhaitez supprimer?");
-        try (Scanner sc = new Scanner(System.in)) {
-            String str1 = sc.nextLine();
-            Poste posteASupprimer = new Poste(str1, null,null);
-            for (int i = 0; i < listePoste.size(); i++) {
-                if (listePoste.get(i).getRefPoste().equals(posteASupprimer.getRefPoste())) {
-                    listePoste.remove(i);
-                }
-                else{
-                    System.out.println("Le poste n'existe pas");
-                }
-            }
-        }
-    } 
-
-    public void modifierPoste(){
-    }
-
-    public void afficheMachine(){
-        for (int i = 0; i < this.listeMachine.size(); i++) {
-            System.out.println("Machine "+i+" : "+this.listeMachine.get(i));
-          }
-    } 
-     
-    public void supprimerMachine(){
-    } 
-
-    public void modifierMachine(){
-    }
-
-    public void afficheGamme(){
-        for (int i=0; i<this.listeGamme.size(); i++){
-            System.out.println("Gamme "+i+": "+this.listeGamme.get(i));
-        }
-    }
-
-    public void supprimerGamme(){
-    }
-    
-    public void modifierGamme(){
-    }
-
     public double calculerFiabiliteMachineUnique(Map<String, List<EvenementMachine>> donnees, String refMachine) {
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    List<EvenementMachine> evenements = donnees.get(refMachine);
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        List<EvenementMachine> evenements = donnees.get(refMachine);
 
-    evenements.sort(Comparator.comparing(e -> e.horodatage));
+        evenements.sort(Comparator.comparing(e -> e.horodatage));
 
-    Map<String, Long> cumulParJour = new HashMap<>();
-    Map<String, Long> observationParJour = new HashMap<>();
+        Map<String, Long> cumulParJour = new HashMap<>();
+        Map<String, Long> observationParJour = new HashMap<>();
 
-    Date heureDebut = null;
-    String jourCourant = null;
+        Date heureDebut = null;
+        String jourCourant = null;
 
-    for (EvenementMachine e : evenements) {
-        String jour = sdf.format(e.horodatage);
+        for (EvenementMachine e : evenements) {
+            String jour = sdf.format(e.horodatage);
 
-        // Heures de fonctionnement = 6h à 20h = 14h = 840 minutes
-        observationParJour.putIfAbsent(jour, 840L);
+            // Heures de fonctionnement = 6h à 20h = 14h = 840 minutes
+            observationParJour.putIfAbsent(jour, 840L);
 
-        int heure = e.horodatage.getHours();
-        if (heure < 6 || heure >= 20) continue;  // En dehors de la plage de fonctionnement
+            int heure = e.horodatage.getHours();
+            if (heure < 6 || heure >= 20) continue;  // En dehors de la plage de fonctionnement
 
-        if (e.type.equals("A")) {
-            heureDebut = e.horodatage;
-            jourCourant = jour;
-        } else if (e.type.equals("D") && heureDebut != null &&
-                (e.evenement.equalsIgnoreCase("ok") || e.evenement.equalsIgnoreCase("maintenance réussie"))) {
+            if (e.type.equals("A")) {
+                heureDebut = e.horodatage;
+                jourCourant = jour;
+            } else if (e.type.equals("D") && heureDebut != null &&
+                    (e.evenement.equalsIgnoreCase("ok") || e.evenement.equalsIgnoreCase("maintenance réussie"))) {
 
-            long debut = Math.max(heureDebut.getTime(), getTimeAtHour(heureDebut, 6));
-            long fin = Math.min(e.horodatage.getTime(), getTimeAtHour(heureDebut, 20));
+                long debut = Math.max(heureDebut.getTime(), getTimeAtHour(heureDebut, 6));
+                long fin = Math.min(e.horodatage.getTime(), getTimeAtHour(heureDebut, 20));
 
-            long duree = (fin - debut) / (1000 * 60);
-            if (duree > 0) {
-                cumulParJour.put(jourCourant, cumulParJour.getOrDefault(jourCourant, 0L) + duree);
+                long duree = (fin - debut) / (1000 * 60);
+                if (duree > 0) {
+                    cumulParJour.put(jourCourant, cumulParJour.getOrDefault(jourCourant, 0L) + duree);
+                }
+                heureDebut = null;
             }
-            heureDebut = null;
         }
-    }
 
-    long totalCumul = cumulParJour.values().stream().mapToLong(Long::longValue).sum();
-    long totalObservation = observationParJour.values().stream().mapToLong(Long::longValue).sum();
+        long totalCumul = cumulParJour.values().stream().mapToLong(Long::longValue).sum();
+        long totalObservation = observationParJour.values().stream().mapToLong(Long::longValue).sum();
 
-    double fiabilite = totalObservation > 0 ? (double) totalCumul / totalObservation : 0;
+        double fiabilite = totalObservation > 0 ? (double) totalCumul / totalObservation : 0;
 
-    return fiabilite;
+        return fiabilite;
     }
 
     private long getTimeAtHour(Date base, int targetHour) {

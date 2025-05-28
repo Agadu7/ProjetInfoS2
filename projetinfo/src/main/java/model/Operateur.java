@@ -38,14 +38,4 @@ public class Operateur {
         this.competences = competences;
     }
 
-    public String convertirEnLigneOperateur(){
-        return code + ";" + nom + ";" + prenom + ";" + competences;
-    }
-
-    public static Operateur convertirEnObjetOperateur(String ligne) {
-        String[] parts = ligne.split(";");
-        return new Operateur(parts[0], parts[1], parts[2], parts[3]);
-    }
-
-    
 }
