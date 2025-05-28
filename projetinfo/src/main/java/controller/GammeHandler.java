@@ -9,7 +9,6 @@ import model.Gamme;
 import model.Machine;
 import model.Operation;
 import model.Produit;
-import model.Atelier;
 import vue.AtelierWindow;
 
 import java.util.ArrayList;

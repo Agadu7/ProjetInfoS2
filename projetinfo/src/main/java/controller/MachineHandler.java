@@ -1,9 +1,5 @@
 package controller;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -11,7 +7,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import model.Atelier;
 import model.EvenementMachine;
 import model.Machine;
 import vue.AtelierWindow;
@@ -53,19 +48,29 @@ public class MachineHandler {
         TextField coutField = new TextField();
         coutField.setPromptText("Coût (€/heure)");
 
-        // Ajout du ColorPicker
         ColorPicker colorPicker = new ColorPicker(Color.LIGHTBLUE);
 
         Button suppButton = new Button("Supprimer Machine");
         suppButton.setOnAction(e -> {
             Machine selected = machineSelector.getValue();
             if (selected != null) {
+                // Efface uniquement la zone de la machine avec la couleur de fond
+                gc.setFill(Color.LIGHTGRAY); // Met ici la couleur de fond de ton atelier
+                gc.fillRect(AtelierWindow.ATELIER_X + selected.x, AtelierWindow.ATELIER_Y + selected.y - 12,
+                            selected.Largeur, selected.Hauteur + 14); // Un peu plus haut et plus bas pour effacer le texte
+
+                gc.setStroke(Color.BLACK);
+                gc.strokeRect(AtelierWindow.ATELIER_X + selected.x, AtelierWindow.ATELIER_Y + selected.y,
+                            selected.Largeur, selected.Hauteur);
+
                 machines.remove(selected);
-                gc.clearRect(AtelierWindow.ATELIER_X, AtelierWindow.ATELIER_Y, AtelierWindow.ATELIER_WIDTH, AtelierWindow.ATELIER_HEIGHT);
+                machineSelector.getSelectionModel().clearSelection();
             } else {
                 AtelierWindow.showAlert("Erreur", "Aucune machine sélectionnée.");
             }
         });
+
+
 
         Button modifButton = new Button("Modifier Machine");
         modifButton.setOnAction(e -> {
@@ -82,7 +87,6 @@ public class MachineHandler {
                     float height = Float.parseFloat(hField.getText());
                     float cout = Float.parseFloat(coutField.getText());
 
-                    // Vérification des bornes
                     if (x < 0 || y < 0 || width <= 0 || height <= 0 ||
                             x + width > AtelierWindow.ATELIER_WIDTH || y + height > AtelierWindow.ATELIER_HEIGHT) {
                         AtelierWindow.showAlert("Erreur", "Dimensions hors de l'atelier.");
@@ -93,7 +97,8 @@ public class MachineHandler {
                         return;
                     }
 
-                    // Mise à jour des attributs de la machine sélectionnée
+                    gc.clearRect(AtelierWindow.ATELIER_X + selected.x, AtelierWindow.ATELIER_Y + selected.y, selected.Largeur, selected.Hauteur);
+
                     selected.type = name;
                     selected.dMachine = description;
                     selected.refMachine = reference;
@@ -103,21 +108,14 @@ public class MachineHandler {
                     selected.Hauteur = height;
                     selected.cout = cout;
 
-                    // Récupération de la couleur choisie
                     Color machineColor = colorPicker.getValue();
 
-                    //Suppression de l'ancienne machine
-                    machines.remove(selected);
-                    gc.clearRect(AtelierWindow.ATELIER_X, AtelierWindow.ATELIER_Y, AtelierWindow.ATELIER_WIDTH, AtelierWindow.ATELIER_HEIGHT);
-
-                    // Redessin de la machine avec les nouvelles valeurs
                     gc.setFill(machineColor);
                     gc.fillRect(AtelierWindow.ATELIER_X + x, AtelierWindow.ATELIER_Y + y, width, height);
                     gc.setStroke(Color.BLACK);
                     gc.strokeRect(AtelierWindow.ATELIER_X + x, AtelierWindow.ATELIER_Y + y, width, height);
                     gc.strokeText(name, AtelierWindow.ATELIER_X + 2 + x, AtelierWindow.ATELIER_Y + 2 + y);
 
-                    // Reset champs
                     nameField.clear();
                     descField.clear();
                     refField.clear();
@@ -126,7 +124,8 @@ public class MachineHandler {
                     wField.clear();
                     hField.clear();
                     coutField.clear();
-                    colorPicker.setValue(Color.LIGHTBLUE); // Reset couleur
+                    colorPicker.setValue(Color.LIGHTBLUE);
+
                     AtelierWindow.showAlert("Succès", "Machine modifiée !");
                 } catch (NumberFormatException ex) {
                     AtelierWindow.showAlert("Erreur", "Valeurs numériques invalides.");
@@ -147,7 +146,6 @@ public class MachineHandler {
                 float height = Float.parseFloat(hField.getText());
                 float cout = Float.parseFloat(coutField.getText());
 
-                // Vérification des bornes
                 if (x < 0 || y < 0 || width <= 0 || height <= 0 ||
                         x + width > AtelierWindow.ATELIER_WIDTH || y + height > AtelierWindow.ATELIER_HEIGHT) {
                     AtelierWindow.showAlert("Erreur", "Dimensions hors de l'atelier.");
@@ -158,7 +156,6 @@ public class MachineHandler {
                     return;
                 }
 
-                // Vérification des chevauchements
                 for (Machine m : machines) {
                     if (m.overlaps(x, y, width, height)) {
                         AtelierWindow.showAlert("Erreur", "Une machine existe déjà à cet emplacement.");
@@ -166,21 +163,17 @@ public class MachineHandler {
                     }
                 }
 
-                // Récupération de la couleur choisie
                 Color machineColor = colorPicker.getValue();
 
-                // Création et ajout
                 Machine machine = new Machine(name, description, x, y, reference, width, height, cout);
                 machines.add(machine);
 
-                // Dessin avec la couleur sélectionnée
                 gc.setFill(machineColor);
                 gc.fillRect(AtelierWindow.ATELIER_X + x, AtelierWindow.ATELIER_Y + y, width, height);
                 gc.setStroke(Color.BLACK);
                 gc.strokeRect(AtelierWindow.ATELIER_X + x, AtelierWindow.ATELIER_Y + y, width, height);
                 gc.strokeText(name, AtelierWindow.ATELIER_X + 2 + x, AtelierWindow.ATELIER_Y + 12 + y);
 
-                // Reset champs
                 nameField.clear();
                 descField.clear();
                 refField.clear();
@@ -190,7 +183,7 @@ public class MachineHandler {
                 hField.clear();
                 coutField.clear();
 
-                colorPicker.setValue(Color.LIGHTBLUE); // Reset couleur
+                colorPicker.setValue(Color.LIGHTBLUE);
 
                 AtelierWindow.showAlert("Succès", "Machine ajoutée !");
             } catch (NumberFormatException ex) {
@@ -198,19 +191,18 @@ public class MachineHandler {
             }
         });
 
-        // Sélection d'une machine existante
         machineSelector.setOnAction(e -> {
             Machine selected = machineSelector.getValue();
             if (selected != null) {
-                nameField.setText(selected.refMachine);
-                descField.setText(selected.dMachine);
                 nameField.setText(selected.type);
+                descField.setText(selected.dMachine);
+                refField.setText(selected.refMachine);
                 xField.setText(String.valueOf(selected.x));
                 yField.setText(String.valueOf(selected.y));
                 wField.setText(String.valueOf(selected.Largeur));
                 hField.setText(String.valueOf(selected.Hauteur));
                 coutField.setText(String.valueOf(selected.cout));
-                refField.setDisable(true); // On évite de modifier la référence
+                refField.setDisable(true);
             }
         });
 
@@ -219,33 +211,8 @@ public class MachineHandler {
         Button Fiabilite = new Button("Calculer la fiabilité de la machine sélectionnée");
         styleButton(Fiabilite);
         Fiabilite.setOnAction(e -> {
-            String ref = refField.getText().trim();
+            String ref = refField.getText();
             System.out.println("Référence sélectionnée : " + ref);
-            /*Machine selectedMachine = machines.stream()
-                    .filter(m -> m.getRefMachine().equals(ref))
-                    .findFirst()
-                    .orElse(null);
-
-            if (ref == null) {
-                AtelierWindow.showAlert("Erreur", "Aucune machine trouvée avec cette référence.");
-                return;
-            }
-            else{
-                try {
-                    // Charger les événements depuis le fichier
-                    em.chargerEvenements("suiviMaintenance.txt");
-
-                    // Récupérer les événements par machine
-                    Map<String, List<EvenementMachine>> evenementsParMachine = em.evenementsParMachine;
-
-                    // Calculer la fiabilité pour la machine avec la ref
-                    double fiabilite = new Atelier().calculerFiabiliteMachineUnique(evenementsParMachine, ref);
-
-                    System.out.println("Fiabilité de la machine " + ref + " : " + String.format("%.4f", fiabilite));
-                } catch (IOException ex) {
-                    System.out.println("Erreur lors du chargement des événements : " + ex.getMessage());
-                }
-            }*/ 
         });
 
         box.getChildren().addAll(
@@ -265,6 +232,7 @@ public class MachineHandler {
 
         return box;
     }
+
     private static void styleButton(Button btn) {
         btn.setStyle("-fx-background-color: #2980b9; " +
                 "-fx-text-fill: white; " +
@@ -273,4 +241,3 @@ public class MachineHandler {
                 "-fx-background-radius: 10;");
     }
 }
-

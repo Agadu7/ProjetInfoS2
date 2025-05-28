@@ -1,13 +1,14 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Poste {
-    private String refPoste;
-    private String dPoste;
-    private ArrayList<Machine> listeMachine;
+    public String refPoste;
+    public String dPoste;
+    public List<Machine> listeMachine;
 
-    public Poste(String refPoste, String dPoste, ArrayList<Machine> listeMachine) {
+    public Poste(String refPoste, String dPoste, List<Machine> listeMachine) {
         this.refPoste = refPoste;
         this.dPoste = dPoste;
         this.listeMachine = new ArrayList<>(listeMachine); // copie défensive
@@ -29,11 +30,11 @@ public class Poste {
         this.dPoste = dPoste;
     }
 
-    public ArrayList<Machine> getListeMachine() {
+    public List<Machine> getListeMachine() {
         return listeMachine;
     }
 
-    public void setListeMachine(ArrayList<Machine> listeMachine) {
+    public void setListeMachine(List<Machine> listeMachine) {
         this.listeMachine = new ArrayList<>(listeMachine); // copie défensive
     }
 

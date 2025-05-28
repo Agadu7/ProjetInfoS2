@@ -1,8 +1,8 @@
 package model;
 
 public class ChefAtelier {
-    private String nom;
-    private Atelier atelier;
+    public String nom;
+    public Atelier atelier;
 
     public String getNom() {
         return nom;

@@ -1,0 +1,30 @@
+NOM: nomAtelier
+CHEF: nom;nomAtelier
+EQUIPEMENT: ref;desc;Mach_1,Mach_2...;Poste_1,Poste2...; 
+MACHINE: ref;desc;x;y;type;cout;largeur;hauteur; 
+PRODUIT: code;desc; 
+OPERATEUR: code;nom;prenom;competence; 
+OPERATION: ref;desc;refEquipement;dureeOperation; 
+POSTE: refPoste;dPoste;Mach_1,Mach_2...;
+GAMME: Mach_1,Mach_2;ref;Operation_1,Operation_2...;Porduit_1,Porduit_2...,
+
+NOM: nomAtelier
+CHEF: nom;nomAtelier
+EQUIPEMENT: ref;desc;Mach_1,Mach_2...;Poste_1,Poste2...; 
+MACHINE: ref;desc;x;y;type;cout;largeur;hauteur; 
+PRODUIT: code;desc; 
+OPERATEUR: code;nom;prenom;competence; 
+OPERATION: ref;desc;refEquipement;dureeOperation; 
+POSTE: refPoste;dPoste;Mach_1,Mach_2...;
+GAMME: Mach_1,Mach_2;ref;Operation_1,Operation_2...;Porduit_1,Porduit_2...,
+
+NOM: nomAtelier
+CHEF: nom;nomAtelier
+EQUIPEMENT: ref;desc;Mach_1,Mach_2...;Poste_1,Poste2...; 
+MACHINE: ref;desc;x;y;type;cout;largeur;hauteur; 
+PRODUIT: code;desc; 
+OPERATEUR: code;nom;prenom;competence; 
+OPERATION: ref;desc;refEquipement;dureeOperation; 
+POSTE: refPoste;dPoste;Mach_1,Mach_2...;
+GAMME: Mach_1,Mach_2;ref;Operation_1,Operation_2...;Porduit_1,Porduit_2...,
+

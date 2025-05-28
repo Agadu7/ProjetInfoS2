@@ -1,6 +1,5 @@
 package model;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
@@ -10,11 +9,11 @@ import java.util.Scanner;
 import java.text.SimpleDateFormat;
 
 public class Atelier {
-    private int codeAtelier;
-    public ArrayList<Operateur> listeOperateur;
-    public ArrayList<Machine> listeMachine;
-    public ArrayList<Poste> listePoste;
-    public ArrayList<Gamme> listeGamme;
+    public int codeAtelier;
+    public List<Operateur> listeOperateur;
+    public List<Machine> listeMachine;
+    public List<Poste> listePoste;
+    public List<Gamme> listeGamme;
 
     public int getCodeAtelier() {
         return codeAtelier;
@@ -24,14 +23,14 @@ public class Atelier {
         this.codeAtelier = codeAtelier;
     }
     
-    public ArrayList<Operateur> getListeoperateur() {
+    public List<Operateur> getListeoperateur() {
         return listeOperateur;
     }
-    public void setListePersonne(ArrayList<Operateur> listeOperateur) {
+    public void setListePersonne(List<Operateur> listeOperateur) {
         this.listeOperateur = listeOperateur;
     }
 
-    public Atelier (int codeAtelier,ArrayList<Operateur> listeOperateur,ArrayList<Machine> listeMachine,ArrayList<Poste> listePoste, ArrayList<Gamme> listeGamme){
+    public Atelier (int codeAtelier,List<Operateur> listeOperateur,List<Machine> listeMachine,List<Poste> listePoste, List<Gamme> listeGamme){
         this.codeAtelier=codeAtelier;
         this.listeOperateur=listeOperateur;
         this.listePoste=listePoste;
@@ -39,27 +38,27 @@ public class Atelier {
         this.listeGamme=listeGamme;
     }
 
-    public ArrayList<Machine> getListeMachine() {
+    public List<Machine> getListeMachine() {
         return listeMachine;
     }
 
-    public void setListeMachine(ArrayList<Machine> listeMachine) {
+    public void setListeMachine(List<Machine> listeMachine) {
         this.listeMachine = listeMachine;
     }
 
-    public ArrayList<Poste> getListePoste() {
+    public List<Poste> getListePoste() {
         return listePoste;
     }
 
-    public void setListePoste(ArrayList<Poste> listePoste) {
+    public void setListePoste(List<Poste> listePoste) {
         this.listePoste = listePoste;
     }
 
-    public ArrayList<Gamme> getListeGamme() {
+    public List<Gamme> getListeGamme() {
         return listeGamme;
     }
 
-    public void setListeGamme(ArrayList<Gamme> listeGamme) {
+    public void setListeGamme(List<Gamme> listeGamme) {
         this.listeGamme = listeGamme;
     }
 

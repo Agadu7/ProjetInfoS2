@@ -1,25 +1,27 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Gamme {
-    public ArrayList<Machine> listeMachine;
+    public List<Machine> listeMachine;
     public String refGamme;
-    public ArrayList<Operation> listeOperation;
-    public ArrayList<Produit> listeProduit;
+    public List<Operation> listeOperation;
+    public List<Produit> listeProduit;
+    
 
-    public Gamme(ArrayList<Machine> listeMachine, String refGamme, ArrayList<Operation> listeOperation,ArrayList<Produit> listeProduit) {
+    public Gamme(List<Machine> listeMachine, String refGamme, List<Operation> listeOperation,List<Produit> listeProduit) {
         this.listeMachine = listeMachine;
         this.refGamme=refGamme;
         this.listeOperation = listeOperation;
         this.listeProduit=listeProduit;
     }
     
-    public ArrayList<Machine> getListeMachine() {
+    public List<Machine> getListeMachine() {
         return listeMachine;
     }
-    public void setListeMachine(ArrayList<Machine> listeMachine) {
+    public void setListeMachine(List<Machine> listeMachine) {
         this.listeMachine = listeMachine;
     }
     public String getRefGamme() {
@@ -28,17 +30,17 @@ public class Gamme {
     public void setRefGamme(String refGamme) {
         this.refGamme = refGamme;
     }
-    public ArrayList<Operation> getListeOperation() {
+    public List<Operation> getListeOperation() {
         return listeOperation;
     }
-    public void setListeOperation(ArrayList<Operation> listeOperation) {
+    public void setListeOperation(List<Operation> listeOperation) {
         this.listeOperation = listeOperation;
     }
-    public ArrayList<Produit> getListeProduit() {
+    public List<Produit> getListeProduit() {
         return listeProduit;
     }
 
-    public void setListeProduit(ArrayList<Produit> listeProduit) {
+    public void setListeProduit(List<Produit> listeProduit) {
         this.listeProduit = listeProduit;
     }
 
