@@ -1,7 +1,8 @@
 package controller;
 
+import java.util.List;
+
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -13,13 +14,12 @@ import vue.AtelierWindow;
 
 public class MachineHandler {
 
-    public static VBox getControls(GraphicsContext gc) {
-
-        final ObservableList<Machine> machines = FXCollections.observableArrayList();
+    public static VBox getControls(GraphicsContext gc,
+                                   List<Machine> machines) {
 
         ComboBox<Machine> machineSelector = new ComboBox<>();
         machineSelector.setPromptText("Sélectionner une machine");
-        machineSelector.setItems(machines);
+        machineSelector.setItems(FXCollections.observableArrayList(machines));
 
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));

@@ -37,15 +37,5 @@ public class Gamme {
     public List<Produit> getListeProduit() {
         return listeProduit;
     }
-
-    public void setListeProduit(List<Produit> listeProduit) {
-        this.listeProduit = listeProduit;
-    }
-
-    public void afficheProduit(){
-        for (int i = 0; i < this.listeProduit.size(); i++) {
-            System.out.println("Produit "+i+" : "+this.listeProduit.get(i));
-          }
-    }
     
 }

@@ -14,9 +14,7 @@ import java.util.List;
 
 public class PosteHandler {
 
-    private static final List<Poste> postes = new ArrayList<>();
-
-    public static VBox getControls(List<Machine> machinesDisponibles) {
+    public static VBox getControls(List<Machine> machinesDisponibles,List<Poste> postes) {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
 

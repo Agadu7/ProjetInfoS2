@@ -16,14 +16,10 @@ import java.util.List;
 
 public class GammeHandler {
 
-    private static final List<Gamme> gammes = new ArrayList<>();
 
-    // À adapter avec tes données disponibles
-    private static final List<Machine> allMachines = new ArrayList<>();
-    private static final List<Operation> allOperations = new ArrayList<>();
-    private static final List<Produit> allProduits = new ArrayList<>();
-
-    public static VBox getControls() {
+    public static VBox getControls(List<Machine> allMachines,
+                                   List<Operation> allOperations,
+                                   List<Produit> allProduits, List<Gamme> gammes) {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
 

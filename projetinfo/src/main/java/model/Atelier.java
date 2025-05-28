@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.text.SimpleDateFormat;
 
 public class Atelier {
@@ -23,7 +22,7 @@ public class Atelier {
         this.codeAtelier = codeAtelier;
     }
     
-    public List<Operateur> getListeoperateur() {
+    public List<Operateur> getListeOperateurs() {
         return listeOperateur;
     }
     public void setListePersonne(List<Operateur> listeOperateur) {
@@ -114,13 +113,6 @@ public class Atelier {
         copy.setMinutes(0);
         copy.setSeconds(0);
         return copy.getTime();
-    }
-
-    public boolean check(String refGamme) {
-        Optional<Gamme> gamme = listeGamme.stream()
-                .filter(m -> m.getRefGamme().equals(refGamme))
-                .findFirst();
-        return gamme.isPresent();
     }
 
 }

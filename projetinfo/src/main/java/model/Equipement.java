@@ -1,30 +1,30 @@
 package model;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class Equipement {
     public String refEquipement;
     public String dEquipement;
-    public ArrayList<Machine> listeMachine;
-    public ArrayList<Poste> listePostes;
+    public List<Machine> listeMachine;
+    public List<Poste> listePostes;
 
-    public ArrayList<Machine> getListeMachine() {
+    public List<Machine> getListeMachine() {
         return listeMachine;
     }
 
-    public void setListeMachine(ArrayList<Machine> listeMachine) {
+    public void setListeMachine(List<Machine> listeMachine) {
         this.listeMachine = listeMachine;
     }
 
-    public ArrayList<Poste> getListePostes() {
+    public List<Poste> getListePostes() {
         return listePostes;
     }
 
-    public void setListePostes(ArrayList<Poste> listePostes) {
+    public void setListePostes(List<Poste> listePostes) {
         this.listePostes = listePostes;
     }
 
-    public Equipement(String refEquipement, String dEquipement, ArrayList<Machine> listeMachine, ArrayList<Poste> listePostes) {
+    public Equipement(String refEquipement, String dEquipement, List<Machine> listeMachine, List<Poste> listePostes) {
         this.refEquipement = refEquipement;
         this.dEquipement=dEquipement;
         this.listeMachine = listeMachine;

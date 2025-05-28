@@ -18,6 +18,10 @@ import controller.MachineHandler;
 import controller.OperateurHandler;
 import controller.OperationHandler;
 import controller.PosteHandler;
+import controller.ProduitHandler;
+import model.Atelier;
+import model.Equipement;
+import model.Gamme;
 //import controller.ProduitHandler;
 import model.Machine;
 
@@ -26,11 +30,12 @@ public class AtelierWindow {
     public static final double ATELIER_Y = 50;
     public static final double ATELIER_WIDTH = 750;
     public static final double ATELIER_HEIGHT = 625;
+    /*public static final Gamme GAMME = new Gamme(null, null, null, null);
     public static final List<Machine> MACHINE_DISPONIBLE = new ArrayList<>(Arrays.asList(
             new Machine("Machine A", "Machine A",100, 100, "Machine A", 50, 30, 30),
             new Machine("Machine B", "Machine B", 200, 200, "Machine B", 60, 40, 40),
             new Machine("Machine C", "Machine C", 300, 300, "Machine C", 70, 50, 50)
-    ));
+    ));*/
 
     public static final List<Machine> machines = new ArrayList<>();
 
@@ -75,22 +80,23 @@ public class AtelierWindow {
             String selected = entitySelector.getValue();
             switch (selected) {
                 case "Machine":
-                    entityControls.getChildren().add(MachineHandler.getControls(gc));
+                    entityControls.getChildren().add(MachineHandler.getControls(gc, Atelier.getListeMachine()));
                     break;
                 case "Gamme":
-                    entityControls.getChildren().add(GammeHandler.getControls());
+                    entityControls.getChildren().add(GammeHandler.getControls(Atelier.getListeMachine(),
+                            Atelier.getListeOperation(), Atelier.getListeProduit(),Atelier.getListeGamme()));
                     break;
                 case "Produit":
-                    //entityControls.getChildren().add(ProduitHandler.getControls());
+                    entityControls.getChildren().add(ProduitHandler.getControls(GAMME));
                     break;
                 case "Poste":
-                    entityControls.getChildren().add(PosteHandler.getControls(MACHINE_DISPONIBLE));
+                    entityControls.getChildren().add(PosteHandler.getControls(Atelier.getListeMachine(), Atelier.getListePoste()));
                     break;
                 case "Opération":
-                    entityControls.getChildren().add(OperationHandler.getControls());
+                    entityControls.getChildren().add(OperationHandler.getControls(Equipement.getListeOperation()));
                     break;
                 case "Operateur":
-                    entityControls.getChildren().add(OperateurHandler.getControls());
+                    entityControls.getChildren().add(OperateurHandler.getControls(Atelier.getListeOperateur()));
                     break;
                 default:
                     showAlert("Erreur", "Sélection invalide.");

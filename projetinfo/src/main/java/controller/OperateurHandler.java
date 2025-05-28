@@ -8,14 +8,11 @@ import javafx.scene.layout.VBox;
 import model.Operateur;
 import vue.AtelierWindow;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class OperateurHandler {
 
-    private static final List<Operateur> operateurs = new ArrayList<>();
-
-    public static VBox getControls() {
+    public static VBox getControls(List<Operateur> operateurs) {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
 

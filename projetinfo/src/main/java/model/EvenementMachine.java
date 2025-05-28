@@ -22,7 +22,8 @@ import java.util.Map;
             this.evenement = evenement;
             this.machine = machine;
         }
-        public void chargerEvenements(String suiviMaintenance) throws IOException {
+
+    public void chargerEvenements(String suiviMaintenance) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader("suiviMaintenance.txt"));
         String ligne;
         SimpleDateFormat formatDate = new SimpleDateFormat("ddMMyyyy HH:mm");
