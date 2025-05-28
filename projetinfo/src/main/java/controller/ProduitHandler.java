@@ -6,22 +6,19 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import model.Produit;
+import model.Gamme;
 import vue.AtelierWindow;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProduitHandler {
 
-    private static final List<Produit> produits = new ArrayList<>();
-
-    public static VBox getControls() {
+    public static VBox getControls(Gamme gamme) {
         VBox box = new VBox(10);
         box.setPadding(new Insets(10));
 
+        // Récupération des produits de la gamme
         ComboBox<Produit> produitSelector = new ComboBox<>();
         produitSelector.setPromptText("Sélectionner un produit");
-        produitSelector.setItems(FXCollections.observableArrayList(produits));
+        produitSelector.setItems(FXCollections.observableArrayList(gamme.getListeProduit()));
 
         TextField codeField = new TextField();
         codeField.setPromptText("Code de référence");
@@ -42,8 +39,9 @@ public class ProduitHandler {
                 AtelierWindow.showAlert("Erreur", "Référence obligatoire.");
                 return;
             }
-            for (Produit p : produits) {
-                if (p.codeProduit.equals(ref)) {
+
+            for (Produit p : gamme.getListeProduit()) {
+                if (p.getCodeProduit().equals(ref)) {
                     AtelierWindow.showAlert("Erreur", "Référence déjà existante.");
                     return;
                 }
@@ -53,8 +51,8 @@ public class ProduitHandler {
                     ref,
                     descArea.getText().trim()
             );
-            produits.add(p);
-            produitSelector.setItems(FXCollections.observableArrayList(produits));
+            gamme.getListeProduit().add(p);
+            produitSelector.setItems(FXCollections.observableArrayList(gamme.getListeProduit()));
             clearFields(codeField, descArea);
         });
 
@@ -62,9 +60,9 @@ public class ProduitHandler {
         produitSelector.setOnAction(e -> {
             Produit selected = produitSelector.getValue();
             if (selected != null) {
-                codeField.setText(selected.codeProduit);
-                descArea.setText(selected.dProduit);
-                codeField.setDisable(true); // On évite de modifier la référence
+                codeField.setText(selected.getCodeProduit());
+                descArea.setText(selected.getdProduit());
+                codeField.setDisable(true);
             }
         });
 
@@ -76,8 +74,8 @@ public class ProduitHandler {
                 return;
             }
 
-            selected.dProduit = descArea.getText().trim();
-            produitSelector.setItems(FXCollections.observableArrayList(produits));
+            selected.setdProduit(descArea.getText().trim());
+            produitSelector.setItems(FXCollections.observableArrayList(gamme.getListeProduit()));
             clearFields(codeField, descArea);
             codeField.setDisable(false);
         });
@@ -89,8 +87,9 @@ public class ProduitHandler {
                 AtelierWindow.showAlert("Erreur", "Aucun produit sélectionné.");
                 return;
             }
-            produits.remove(selected);
-            produitSelector.setItems(FXCollections.observableArrayList(produits));
+
+            gamme.getListeProduit().remove(selected);
+            produitSelector.setItems(FXCollections.observableArrayList(gamme.getListeProduit()));
             clearFields(codeField, descArea);
             codeField.setDisable(false);
         });
@@ -103,7 +102,7 @@ public class ProduitHandler {
         });
 
         box.getChildren().addAll(
-                new Label("Gestion des Produits :"),
+                new Label("Gestion des Produits de la Gamme :"),
                 produitSelector,
                 codeField,
                 descArea,
@@ -118,4 +117,3 @@ public class ProduitHandler {
         desc.clear();
     }
 }
-

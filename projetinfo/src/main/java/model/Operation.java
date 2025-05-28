@@ -37,6 +37,4 @@ public class Operation {
     public void setDureeOperation(float dureeOperation) {
         this.dureeOperation = dureeOperation;
     }
-
-    
 }

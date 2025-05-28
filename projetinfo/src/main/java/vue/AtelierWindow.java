@@ -13,20 +13,19 @@ import javafx.stage.Stage;
 
 import java.util.*;
 
-import controller.EquipementHandler;
 import controller.GammeHandler;
 import controller.MachineHandler;
 import controller.OperateurHandler;
 import controller.OperationHandler;
 import controller.PosteHandler;
-import controller.ProduitHandler;
+//import controller.ProduitHandler;
 import model.Machine;
 
 public class AtelierWindow {
     public static final double ATELIER_X = 50;
     public static final double ATELIER_Y = 50;
-    public static final double ATELIER_WIDTH = 600;
-    public static final double ATELIER_HEIGHT = 300;
+    public static final double ATELIER_WIDTH = 750;
+    public static final double ATELIER_HEIGHT = 625;
     public static final List<Machine> MACHINE_DISPONIBLE = new ArrayList<>(Arrays.asList(
             new Machine("Machine A", "Machine A",100, 100, "Machine A", 50, 30, 30),
             new Machine("Machine B", "Machine B", 200, 200, "Machine B", 60, 40, 40),
@@ -65,7 +64,7 @@ public class AtelierWindow {
         });
 
         ComboBox<String> entitySelector = new ComboBox<>();
-        entitySelector.getItems().addAll("Machine", "Gamme", "Produit", "Equipement", "Poste","Opération", "Operateur");
+        entitySelector.getItems().addAll("Machine", "Gamme", "Produit", "Poste","Opération", "Operateur");
         entitySelector.setPromptText("Sélectionner un élément à gérer");
         entitySelector.setStyle("-fx-font-size: 14px;");
 
@@ -82,10 +81,7 @@ public class AtelierWindow {
                     entityControls.getChildren().add(GammeHandler.getControls());
                     break;
                 case "Produit":
-                    entityControls.getChildren().add(ProduitHandler.getControls());
-                    break;
-                case "Equipement":
-                    entityControls.getChildren().add(EquipementHandler.getControls());
+                    //entityControls.getChildren().add(ProduitHandler.getControls());
                     break;
                 case "Poste":
                     entityControls.getChildren().add(PosteHandler.getControls(MACHINE_DISPONIBLE));
@@ -137,8 +133,13 @@ public class AtelierWindow {
     }
 
     private static void drawAtelier(GraphicsContext gc) {
+        // Remplissage du fond gris clair
+        gc.setFill(Color.LIGHTGRAY); // couleur de fond
+        gc.fillRect(ATELIER_X, ATELIER_Y, ATELIER_WIDTH, ATELIER_HEIGHT);
+
+        // Bordure foncée de 2 pixels
         gc.setStroke(Color.DARKGRAY);
-        gc.setLineWidth(2);
+        gc.setLineWidth(1); // épaisseur de la bordure
         gc.strokeRect(ATELIER_X, ATELIER_Y, ATELIER_WIDTH, ATELIER_HEIGHT);
     }
 

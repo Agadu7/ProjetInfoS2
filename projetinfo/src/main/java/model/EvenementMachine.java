@@ -39,7 +39,7 @@ import java.util.Map;
 
             try {
                 Date horodatage = formatDate.parse(date + " " + heure);
-                System.out.println(horodatage);// Affichage de l'horodatage pour vérification
+                //System.out.println(horodatage);// Affichage de l'horodatage pour vérification
                 EvenementMachine ev = new EvenementMachine(horodatage, type, evenement, machine);
                 evenementsParMachine.putIfAbsent(machine, new ArrayList<>());
                 evenementsParMachine.get(machine).add(ev);
@@ -50,22 +50,4 @@ import java.util.Map;
 
         in.close();
     }
-    public static void main (String[] args) {
-        EvenementMachine em = new EvenementMachine(new Date(), "Type", "Evenement", "Machine");
-        try {
-            em.chargerEvenements("suiviMaintenance.txt");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // Affichage des événements par machine
-        for (String machine : em.evenementsParMachine.keySet()) {
-            System.out.println("Machine: " + machine);
-            for (EvenementMachine ev : em.evenementsParMachine.get(machine)) {
-                System.out.println("  " + ev.horodatage + " - " + ev.type + " - " + ev.evenement);
-            }
-        }
-        chargerFiabilite(em.evenementsParMachine);
-    }
-
-   
 }

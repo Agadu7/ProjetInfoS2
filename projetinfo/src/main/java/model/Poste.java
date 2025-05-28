@@ -8,36 +8,66 @@ public class Poste {
     private ArrayList<Machine> listeMachine;
 
     public Poste(String refPoste, String dPoste, ArrayList<Machine> listeMachine) {
-        this.listeMachine = listeMachine;
-        this.dPoste=dPoste;
-        this.listeMachine=listeMachine;
+        this.refPoste = refPoste;
+        this.dPoste = dPoste;
+        this.listeMachine = new ArrayList<>(listeMachine); // copie défensive
     }
-    
+
     public String getRefPoste() {
         return refPoste;
     }
+
     public void setRefPoste(String refPoste) {
         this.refPoste = refPoste;
     }
+
     public String getdPoste() {
         return dPoste;
     }
+
     public void setdPoste(String dPoste) {
         this.dPoste = dPoste;
     }
+
     public ArrayList<Machine> getListeMachine() {
         return listeMachine;
     }
+
     public void setListeMachine(ArrayList<Machine> listeMachine) {
-        this.listeMachine = listeMachine;
+        this.listeMachine = new ArrayList<>(listeMachine); // copie défensive
     }
 
-    public String convertirEnLignePoste(){
-        return refPoste + ";" + dPoste + ";" + listeMachine;
+    public String convertirEnLignePoste() {
+        // On convertit les machines en une chaîne lisible ou identifiables
+        StringBuilder sb = new StringBuilder();
+        for (Machine m : listeMachine) {
+            sb.append(m.getRefMachine()).append(","); // supposons que Machine a un getNom()
+        }
+        String machinesStr = sb.length() > 0 ? sb.substring(0, sb.length() - 1) : "";
+        return refPoste + ";" + dPoste + ";" + machinesStr;
     }
 
-    public static Poste convertirEnObjetPoste(String ligne, ArrayList<Machine> machines){
+    public static Poste convertirEnObjetPoste(String ligne, ArrayList<Machine> machinesDisponibles) {
         String[] parts = ligne.split(";");
-        return new Poste(parts[0], parts[1], machines);
+        String ref = parts[0];
+        String desc = parts[1];
+        String[] nomsMachines = parts.length > 2 ? parts[2].split(",") : new String[0];
+
+        ArrayList<Machine> machinesAssociees = new ArrayList<>();
+        for (String nom : nomsMachines) {
+            for (Machine m : machinesDisponibles) {
+                if (m.getRefMachine().equals(nom.trim())) {
+                    machinesAssociees.add(m);
+                    break;
+                }
+            }
+        }
+
+        return new Poste(ref, desc, machinesAssociees);
+    }
+
+    @Override
+    public String toString() {
+        return refPoste;
     }
 }

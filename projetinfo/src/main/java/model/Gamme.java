@@ -4,17 +4,15 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Gamme {
-    private ArrayList<Machine> listeMachine;
-    private String refGamme;
-    private ArrayList<Operation> listeOperation;
-    private ArrayList<Equipement> listeEquipement;
-    private ArrayList<Produit> listeProduit;
+    public ArrayList<Machine> listeMachine;
+    public String refGamme;
+    public ArrayList<Operation> listeOperation;
+    public ArrayList<Produit> listeProduit;
 
-    public Gamme(ArrayList<Machine> listeMachine, String refGamme, ArrayList<Operation> listeOperation,ArrayList<Equipement> listeEquipement,ArrayList<Produit> listeProduit) {
+    public Gamme(ArrayList<Machine> listeMachine, String refGamme, ArrayList<Operation> listeOperation,ArrayList<Produit> listeProduit) {
         this.listeMachine = listeMachine;
         this.refGamme=refGamme;
         this.listeOperation = listeOperation;
-        this.listeEquipement=listeEquipement;
         this.listeProduit=listeProduit;
     }
     
@@ -36,13 +34,6 @@ public class Gamme {
     public void setListeOperation(ArrayList<Operation> listeOperation) {
         this.listeOperation = listeOperation;
     }
-    public ArrayList<Equipement> getListeEquipement() {
-        return listeEquipement;
-    }
-    public void setListeEquipement(ArrayList<Equipement> listeEquipement) {
-        this.listeEquipement = listeEquipement;
-    }
-
     public ArrayList<Produit> getListeProduit() {
         return listeProduit;
     }
@@ -115,7 +106,7 @@ public class Gamme {
     }
 
     public String convertirEnLigneGamme(){
-        return listeMachine + ";" + refGamme + ";" + listeOperation + ";" + listeEquipement + ";" + listeProduit;
+        return listeMachine + ";" + refGamme + ";" + listeOperation +  ";" + listeProduit;
     }
 
     

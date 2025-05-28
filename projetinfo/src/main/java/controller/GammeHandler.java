@@ -5,6 +5,11 @@ import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import model.Gamme;
+import model.Machine;
+import model.Operation;
+import model.Produit;
+import model.Atelier;
 import vue.AtelierWindow;
 
 import java.util.ArrayList;
@@ -12,26 +17,12 @@ import java.util.List;
 
 public class GammeHandler {
 
-    static class Gamme {
-        String reference;
-        String description;
-        List<String> produits = new ArrayList<>();
-        List<String> machines = new ArrayList<>();
-
-        Gamme(String reference, String description, List<String> produits, List<String> machines) {
-            this.reference = reference;
-            this.description = description;
-            this.produits = new ArrayList<>(produits);
-            this.machines = new ArrayList<>(machines);
-        }
-
-        @Override
-        public String toString() {
-            return reference;
-        }
-    }
-
     private static final List<Gamme> gammes = new ArrayList<>();
+
+    // À adapter avec tes données disponibles
+    private static final List<Machine> allMachines = new ArrayList<>();
+    private static final List<Operation> allOperations = new ArrayList<>();
+    private static final List<Produit> allProduits = new ArrayList<>();
 
     public static VBox getControls() {
         VBox box = new VBox(10);
@@ -42,16 +33,22 @@ public class GammeHandler {
         gammeSelector.setItems(FXCollections.observableArrayList(gammes));
 
         TextField refField = new TextField();
-        refField.setPromptText("Référence");
+        refField.setPromptText("Référence de la gamme");
 
-        TextField descField = new TextField();
-        descField.setPromptText("Description");
+        ListView<Machine> machineList = new ListView<>(FXCollections.observableArrayList(allMachines));
+        machineList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        machineList.setPrefHeight(100);
+        machineList.setPlaceholder(new Label("Aucune machine"));
 
-        TextField produitsField = new TextField();
-        produitsField.setPromptText("Produits (séparés par des virgules)");
+        ListView<Produit> produitList = new ListView<>(FXCollections.observableArrayList(allProduits));
+        produitList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        produitList.setPrefHeight(100);
+        produitList.setPlaceholder(new Label("Aucun produit"));
 
-        TextField machinesField = new TextField();
-        machinesField.setPromptText("Machines (séparées par des virgules)");
+        ListView<Operation> operationList = new ListView<>(FXCollections.observableArrayList(allOperations));
+        operationList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+        operationList.setPrefHeight(100);
+        operationList.setPlaceholder(new Label("Aucune opération"));
 
         Button addBtn = new Button("Ajouter");
         Button modifyBtn = new Button("Modifier");
@@ -65,33 +62,37 @@ public class GammeHandler {
                 AtelierWindow.showAlert("Erreur", "Référence obligatoire.");
                 return;
             }
+
             for (Gamme g : gammes) {
-                if (g.reference.equals(ref)) {
+                if (g.getRefGamme().equals(ref)) {
                     AtelierWindow.showAlert("Erreur", "Référence déjà existante.");
                     return;
                 }
             }
 
-            Gamme g = new Gamme(
-                    ref,
-                    descField.getText().trim(),
-                    List.of(produitsField.getText().split(",")),
-                    List.of(machinesField.getText().split(","))
-            );
-            gammes.add(g);
+            ArrayList<Machine> selectedMachines = new ArrayList<>(machineList.getSelectionModel().getSelectedItems());
+            ArrayList<Produit> selectedProduits = new ArrayList<>(produitList.getSelectionModel().getSelectedItems());
+            ArrayList<Operation> selectedOperations = new ArrayList<>(operationList.getSelectionModel().getSelectedItems());
+
+            Gamme newGamme = new Gamme(selectedMachines, ref, selectedOperations, selectedProduits);
+            gammes.add(newGamme);
             gammeSelector.setItems(FXCollections.observableArrayList(gammes));
-            clearFields(refField, descField, produitsField, machinesField);
+            clearFields(refField, machineList, produitList, operationList);
         });
 
-        // Sélection d'une gamme existante
+        // Sélectionner une gamme
         gammeSelector.setOnAction(e -> {
             Gamme selected = gammeSelector.getValue();
             if (selected != null) {
-                refField.setText(selected.reference);
-                descField.setText(selected.description);
-                produitsField.setText(String.join(",", selected.produits));
-                machinesField.setText(String.join(",", selected.machines));
-                refField.setDisable(true); // On évite de modifier la référence
+                refField.setText(selected.getRefGamme());
+                refField.setDisable(true);
+                machineList.getSelectionModel().clearSelection();
+                produitList.getSelectionModel().clearSelection();
+                operationList.getSelectionModel().clearSelection();
+
+                selected.getListeMachine().forEach(machineList.getSelectionModel()::select);
+                selected.getListeProduit().forEach(produitList.getSelectionModel()::select);
+                selected.getListeOperation().forEach(operationList.getSelectionModel()::select);
             }
         });
 
@@ -103,11 +104,12 @@ public class GammeHandler {
                 return;
             }
 
-            selected.description = descField.getText().trim();
-            selected.produits = List.of(produitsField.getText().split(","));
-            selected.machines = List.of(machinesField.getText().split(","));
+            selected.setListeMachine(new ArrayList<>(machineList.getSelectionModel().getSelectedItems()));
+            selected.setListeProduit(new ArrayList<>(produitList.getSelectionModel().getSelectedItems()));
+            selected.setListeOperation(new ArrayList<>(operationList.getSelectionModel().getSelectedItems()));
+
             gammeSelector.setItems(FXCollections.observableArrayList(gammes));
-            clearFields(refField, descField, produitsField, machinesField);
+            clearFields(refField, machineList, produitList, operationList);
             refField.setDisable(false);
         });
 
@@ -118,15 +120,16 @@ public class GammeHandler {
                 AtelierWindow.showAlert("Erreur", "Aucune gamme sélectionnée.");
                 return;
             }
+
             gammes.remove(selected);
             gammeSelector.setItems(FXCollections.observableArrayList(gammes));
-            clearFields(refField, descField, produitsField, machinesField);
+            clearFields(refField, machineList, produitList, operationList);
             refField.setDisable(false);
         });
 
         // Effacer tout
         clearBtn.setOnAction(e -> {
-            clearFields(refField, descField, produitsField, machinesField);
+            clearFields(refField, machineList, produitList, operationList);
             gammeSelector.getSelectionModel().clearSelection();
             refField.setDisable(false);
         });
@@ -135,19 +138,19 @@ public class GammeHandler {
                 new Label("Gestion des Gammes :"),
                 gammeSelector,
                 refField,
-                descField,
-                produitsField,
-                machinesField,
+                new Label("Machines :"), machineList,
+                new Label("Produits :"), produitList,
+                new Label("Opérations :"), operationList,
                 new HBox(10, addBtn, modifyBtn, deleteBtn, clearBtn)
         );
 
         return box;
     }
 
-    private static void clearFields(TextField ref, TextField desc, TextField prod, TextField mach) {
+    private static void clearFields(TextField ref, ListView<?> mList, ListView<?> pList, ListView<?> oList) {
         ref.clear();
-        desc.clear();
-        prod.clear();
-        mach.clear();
+        mList.getSelectionModel().clearSelection();
+        pList.getSelectionModel().clearSelection();
+        oList.getSelectionModel().clearSelection();
     }
 }

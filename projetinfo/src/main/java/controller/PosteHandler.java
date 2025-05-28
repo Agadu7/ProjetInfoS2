@@ -31,7 +31,7 @@ public class PosteHandler {
         descArea.setPromptText("Description");
         descArea.setPrefRowCount(3);
 
-        // Sélection multiple de machines associées
+        //Sélection multiple de machines associées
         ListView<Machine> machineListView = new ListView<>();
         machineListView.setItems(FXCollections.observableArrayList(machinesDisponibles));
         machineListView.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
